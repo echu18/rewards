@@ -91,32 +91,58 @@ class Arrangement extends React.Component {
 
           <div className="categories">
             <h3>Categories</h3>
-            <div className='row-1'>
-                <Draggable grid={[200, 200]} axis="x" {...dragHandlers}>
-                    <div className="box">Reward 1</div>
-                </Draggable>
-                <Draggable grid={[200, 200]} axis="x" {...dragHandlers}>
-                    <div className="box">Reward 1</div>
-                </Draggable>
+            <div className='cat-header'>
+                <div>C1</div>
+                <div>C2</div>
+                <div>C3</div>
+                <div>C4</div>
+                <div>C5</div>
             </div>
 
-            <div className='row-2'>
-                <Draggable grid={[200, 200]} axis="x" {...dragHandlers}>
-                    <div className="box">Reward 2</div>
-                </Draggable>
-                <Draggable grid={[200, 200]} axis="x" {...dragHandlers}>
-                    <div className="box">Reward 2</div>
-                </Draggable>
+            <div className="row-1">
+              <Draggable id='draggable' grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 1 <span>x</span></div>
+              </Draggable>
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 1</div>
+              </Draggable>
             </div>
 
+            <div className="row-2">
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 2</div>
+              </Draggable>
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 2</div>
+              </Draggable>
+            </div>
 
+            <div className="row-3">
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 3</div>
+              </Draggable>
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 3</div>
+              </Draggable>
+            </div>
 
+            <div className="row-4">
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 4</div>
+              </Draggable>
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 4</div>
+              </Draggable>
+            </div>
 
-            <div>C1</div>
-            <div>C2</div>
-            <div>C3</div>
-            <div>C4</div>
-            <div>C5</div>
+            <div className="row-5">
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 5</div>
+              </Draggable>
+              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
+                <div className="box">Reward 5</div>
+              </Draggable>
+            </div>
           </div>
         </div>
 
