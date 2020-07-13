@@ -1,3 +1,14 @@
+.arrangement-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.arrangement-container > h3 {
+
+}
+
+
 .box {
     border: 1px solid purple;
     width: 100px;
@@ -6,7 +17,7 @@
 }
 
 .box:hover{
-    cursor: move;
+    cursor: grab;
 }
 
 .layout, .layout > div {
@@ -22,8 +33,8 @@
  .board {
      display: flex;
      flex-direction: row;
-     height: 800px;
-     width: 1000px;
+     height: auto;
+     width: auto;
      border: 1px solid greenyellow;
  }
 
@@ -50,12 +61,19 @@
       width: 100%;
       height: 30px;
   }
+  
+  .rewards > h3 {
+      height: 60px;
+      display: flex;
+      justify-content: center;
+  }
 
 .cat-header {
     display: flex;
     flex-direction: row;
     width: 500px;
 }
+
 
 .cat-header > div {
     display: flex;
@@ -64,8 +82,28 @@
     height: 30px;
 }
 
+.rewards-header {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+
+
+.rewards-header > div {
+    display: flex;
+    justify-content: center;
+    width: 80px;
+    height: 100px;
+    border: 1px solid red;
+}
+
+
+
  .row-1, .row-2, .row-3, .row-4, .row-5 {
+     position: relative;
      display: flex;
      width: 500px;
+     height: 100px;
+     border: 1px solid blue;
      /* width: auto; */
  }

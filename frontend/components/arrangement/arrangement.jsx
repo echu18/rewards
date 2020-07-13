@@ -1,147 +1,120 @@
 // List all arrangements - name, view, edit
 import React from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
-import Draggable, {DraggableCore} from 'react-draggable';
+import Draggable, { DraggableCore } from "react-draggable";
 // import GridLayout from "react-grid-layout";
 import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
 
-
+import Block from './block'
 
 class Arrangement extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    // this.state = {};
+    this.state = {
+        row1: [],
+        row2: [],
+        row3: [],
+        row4: [],
+        row5: [],
+    };
+
+    this.onDrop = this.onDrop.bind(this)
   }
 
-//   handleDrag = (e, ui) => {
-//     const { x, y } = this.state.deltaPosition;
-//     this.setState({
-//       deltaPosition: {
-//         x: x + ui.deltaX,
-//         y: y + ui.deltaY,
-//       },
-//     });
-//   };
 
-//   onStart = () => {
-//     this.setState({ activeDrags: ++this.state.activeDrags });
-//   };
+  // translate coordinates into true/false for rewards hash
+  // translate rewards hash back into true/false
+  
 
-//   onStop = () => {
-//     this.setState({ activeDrags: --this.state.activeDrags });
-//   };
 
-//   // For controlled component
-//   adjustXPos = (e) => {
-//     e.preventDefault();
-//     e.stopPropagation();
-//     const { x, y } = this.state.controlledPosition;
-//     this.setState({ controlledPosition: { x: x - 10, y } });
-//   };
 
-//   adjustYPos = (e) => {
-//     e.preventDefault();
-//     e.stopPropagation();
-//     const { controlledPosition } = this.state;
-//     const { x, y } = controlledPosition;
-//     this.setState({ controlledPosition: { x, y: y - 10 } });
-//   };
 
-//   onControlledDrag = (e, position) => {
-//     const { x, y } = position;
-//     this.setState({ controlledPosition: { x, y } });
-//   };
+    onDrop(e) {
+        e.preventDefault();
+        alert('dragover')
+    }
 
-//   onControlledDragStop = (e, position) => {
-//     this.onControlledDrag(e, position);
-//     this.onStop();
-//   };
+  newBlock(e, rowNum){
+    e.preventDefault()
+    let clickPos = (e.clientX/window.innerHeight) * 100
+
+    let xPos = Math.floor(clickPos/100) * 100
+        
+    this.setState({[rowNum]: this.state[rowNum].concat([<Block xPos={xPos} id={rowNum + '-' + (this.state[rowNum].length+1)}/>])})
+    //if no coordinates are given
+  }
 
   render() {
-       const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
-       const { deltaPosition, controlledPosition } = this.state;
+    const dragHandlers = { onStart: this.onStart, onStop: this.onStop };
+    const { deltaPosition, controlledPosition } = this.state;
 
-
-        const layout = [
-          { i: "a", x: 0, y: 0, w: 1, h: 2, static: true },
-          { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-          { i: "c", x: 4, y: 0, w: 1, h: 2 },
-        ];
+   debugger
 
     return (
-      <div>
-        <h3>Reward Arrangement</h3>
-
-        {/* <GridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
-            <div key="a">a</div>
-            <div key="b">b</div>
-            <div key="c">c</div>
-        </GridLayout> */}
+      <div className="arrangement-container">
+        <h3>Rewards Arrangement</h3>
 
         <div className="board">
           <div className="rewards">
             <h3>Rewards</h3>
 
-            <div>R1</div>
-            <div>R2</div>
-            <div>R3</div>
-            <div>R4</div>
-            <div>R5</div>
+            <div className="rewards-header">
+              <div>R1</div>
+              <div>R2</div>
+              <div>R3</div>
+              <div>R4</div>
+              <div>R5</div>
+            </div>
           </div>
 
           <div className="categories">
             <h3>Categories</h3>
-            <div className='cat-header'>
-                <div>C1</div>
-                <div>C2</div>
-                <div>C3</div>
-                <div>C4</div>
-                <div>C5</div>
+            <div className="cat-header">
+              <div>C1</div>
+              <div>C2</div>
+              <div>C3</div>
+              <div>C4</div>
+              <div>C5</div>
             </div>
 
-            <div className="row-1">
-              <Draggable id='draggable' grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 1 <span>x</span></div>
-              </Draggable>
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 1</div>
-              </Draggable>
+            <div className="row-1" onDoubleClick={(e) => this.newBlock(e, "row1")}>
+              {this.state.row1.map((block) => block)}
+              
+              <div onDrop={e=>this.onDrop(e)}>R1</div>
+              <div onDrop={e=>this.onDrop(e)}>R2</div>
+              <div onDrop={e=>this.onDrop(e)}>R3</div>
+              <div onDrop={e=>this.onDrop(e)}>R4</div>
+              <div onDrop={e=>this.onDrop(e)}>R5</div>
             </div>
 
-            <div className="row-2">
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 2</div>
-              </Draggable>
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 2</div>
-              </Draggable>
+            <div
+              className="row-2"
+              onDoubleClick={(e) => this.newBlock(e, "row2")}
+            >
+              {this.state.row2.map((block) => block)}
             </div>
 
-            <div className="row-3">
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 3</div>
-              </Draggable>
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 3</div>
-              </Draggable>
+            <div
+              className="row-3"
+              onDoubleClick={(e) => this.newBlock(e, "row3")}
+            >
+              {this.state.row3.map((block) => block)}
             </div>
 
-            <div className="row-4">
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 4</div>
-              </Draggable>
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 4</div>
-              </Draggable>
+            <div
+              className="row-4"
+              onDoubleClick={(e) => this.newBlock(e, "row4")}
+            >
+              {this.state.row4.map((block) => block)}
             </div>
 
-            <div className="row-5">
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 5</div>
-              </Draggable>
-              <Draggable grid={[100, 100]} axis="x" {...dragHandlers}>
-                <div className="box">Reward 5</div>
-              </Draggable>
+            <div
+              className="row-5"
+              onDoubleClick={(e) => this.newBlock(e, "row5")}
+            >
+              {this.state.row5.map((block) => block)}
+
             </div>
           </div>
         </div>
@@ -177,16 +150,5 @@ class Arrangement extends React.Component {
 // //   cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
 // //   initialLayout: generateLayout(),
 // };
-
-
-
-
-
-
-
-
-
-
-
 
 export default Arrangement;
