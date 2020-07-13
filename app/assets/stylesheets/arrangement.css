@@ -3,3 +3,41 @@
     width: 200px;
     height: 200px;
 }
+
+.layout, .layout > div {
+    border: 1px solid red;
+}
+
+ .layout > div {
+     height: 200px;
+     width: 200px;
+ }
+
+
+ .board {
+     display: flex;
+     flex-direction: row;
+     height: 800px;
+     width: 1000px;
+     border: 1px solid greenyellow;
+ }
+
+ .board > div {
+     width: 100px;
+ }
+
+ .rewards > div, .categories > div{
+     border: 1px solid purple;
+ }
+
+
+ .categories{
+     border: 1px solid fuchsia;
+ }
+
+
+
+ .row-1, .row-2 {
+     display: flex;
+     /* width: auto; */
+ }
