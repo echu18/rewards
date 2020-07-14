@@ -54,13 +54,24 @@ class Arrangement extends React.Component {
   //   //if no coordinates are given
   // }
 
+
+
+
+
+  // Drag handlers
   dragstart_handler(ev) {
     console.log("dragStart");
     // Change the source element's background color to signify drag has started
 
     ev.currentTarget.style.border = "dashed";
     // Set the drag's format and data. Use the event target's id for the data
-    ev.dataTransfer.setData("text/plain", ev.target.id);
+    // ev.dataTransfer.setData("text/plain", ev.target.id);
+
+    let obj = { row: ev.target.dataset.row, id: ev.target.id };
+    let data = JSON.stringify(obj);
+
+    ev.dataTransfer.setData("text/plain", data);
+    
     // event.dataTransfer.effectAllowed = 'none';
   }
 
@@ -73,33 +84,26 @@ class Arrangement extends React.Component {
     console.log("Drop");
     ev.preventDefault();
     // Get the data, which is the id of the drop target
-    debugger
 
-    var data = ev.dataTransfer.getData("text");
+    var node = JSON.parse(ev.dataTransfer.getData("text")).id;
+    var data = JSON.parse(ev.dataTransfer.getData("text")).row;
     var row = ev.currentTarget.getAttribute("data-row");
     var col = ev.currentTarget.getAttribute("data-col");
 
-    ev.target.appendChild(document.getElementById(data));
+    if (data === row && ev.target.childElementCount === 0) {
+      debugger;
+      ev.target.appendChild(document.getElementById(node));
+    } else {
+      return;
+    }
     // Clear the drag data cache (for all formats/types)
     ev.dataTransfer.clearData();
   }
 
-  // row() {
-  //   let row = [];
-  //   for (let i = 0; i < 5; i++) {
-  //     row.push(
-  //       <div
-  //         id="target"
-  //         onDrop={(event) => this.drop_handler(event)}
-  //         onDragOver={(event) => this.dragover_handler(event)}
-  //       >
-  //         a
-  //       </div>
-  //     );
-  //   }
-  //   return row;
-  // }
 
+
+
+// Board spaces and reward pieces
   mappedBoard() {
     let newBoard = []
 
@@ -114,11 +118,16 @@ class Arrangement extends React.Component {
 
   block(row, col) {
     return (
-      <div id='target' className="board-block" data-row={row} data-col={col} onDrop={(event) => this.drop_handler(event)}                 onDragOver={(event) => this.dragover_handler(event)}
->
+      <div id='target' className="board-block" data-row={row} data-col={col} onDrop={(event) => this.drop_handler(event)} onDragOver={(event) => this.dragover_handler(event)}>
         {row}-{col}
       </div>
     );
+  }
+
+  reward(row){
+    return (
+      <div id={"r-" + row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>
+    )
   }
 
   render() {
@@ -132,11 +141,21 @@ class Arrangement extends React.Component {
               <h3>Rewards</h3>
             </div>
 
-            <div id="r-1" className="board-block" onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R1</div>
-            <div id="r-2" className="board-block" onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
-            <div id="r-3" className="board-block" onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
-            <div id="r-4" className="board-block" onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R4</div>
-            <div id="r-5" className="board-block" onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R5</div>
+            <div className='reward-placemark' onClick={this.reward(1)}>R1</div>
+            {/* <div id="r-2" className="reward-block" data-row='1' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
+            <div id="r-3" className="reward-block" data-row='2' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
+            <div id="r-4" className="reward-block" data-row='3' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R4</div>
+            <div id="r-5" className="reward-block" data-row='4' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R5</div> */}
+
+
+
+
+            // Saved reward pieces - singular
+            {/* <div id="r-1" className="reward-block" data-row='0' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R1</div>
+            <div id="r-2" className="reward-block" data-row='1' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
+            <div id="r-3" className="reward-block" data-row='2' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
+            <div id="r-4" className="reward-block" data-row='3' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R4</div>
+            <div id="r-5" className="reward-block" data-row='4' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R5</div> */}
     
           </div>
 
