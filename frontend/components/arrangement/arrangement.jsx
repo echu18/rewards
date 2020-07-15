@@ -37,6 +37,8 @@ class Arrangement extends React.Component {
     this.dragover_handler = this.dragover_handler.bind(this);
     this.dragstart_handler = this.dragstart_handler.bind(this);
     this.drop_handler = this.drop_handler.bind(this);
+
+    this.deleteReward = this.deleteReward.bind(this)
     // this.row = this.row.bind(this);
   }
 
@@ -44,6 +46,21 @@ class Arrangement extends React.Component {
 
   componentDidMount(){
     // if saved board configuration, map the configuration upon mount
+    // this.props.boardConfig()
+    const defaultBoard = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]
+      
+      if (!!(this.props.savedArrangement)) {
+        this.setState({currentBoard: savedArrangement})
+      } else {
+        this.setState({pastBoard: defaultBoard})
+      }
+
   }
 
 
@@ -65,18 +82,48 @@ class Arrangement extends React.Component {
   //   //if no coordinates are given
   // }
 
-
+  undo(){
+    // Switch present/future boards
+  }
 
 
   updateBoard(){
 
+
+
+    let pastBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
+    let newBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
+    
+
+    let boardBlocks = Object.values(document.getElementsByClassName('board-block'));
+
+
+    for (let i=0; i < boardBlocks.length; i++) {
+        let block = boardBlocks[i];
+
+        let row = parseInt(block.dataset.row)
+        let col = parseInt(block.dataset.col)
+
+
+        // switch (block.childElementCount){
+        //   case 0:
+        //     newBoard[row][col] = 0
+        //   case 1:
+        //     newBoard[row][col] = 1
+        // }
+
+        newBoard[row][col] = block.childElementCount
+      }
     // After a drop or a delete, update the board
+
+    this.setState({pastBoard: pastBoard, currentBoard: newBoard})
+    debugger
   }
 
 
 
   // Drag handlers
-  dragstart_handler(e, dropeffect) {
+  dragstart_handler(e) {
     console.log("dragStart");
     // Change the source element's background color to signify drag has started
 
@@ -109,7 +156,6 @@ class Arrangement extends React.Component {
     ev.preventDefault();
     // Get the data, which is the id of the drop target
 
-      debugger
       let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
       let rewardRow = JSON.parse(ev.dataTransfer.getData("text")).row;
 
@@ -145,6 +191,8 @@ class Arrangement extends React.Component {
       let newCount = this.state.pieceCounter += 1;
       this.setState({pieceCounter: newCount})
 
+
+      this.updateBoard()
     } else {
       return;
     }
@@ -156,6 +204,8 @@ class Arrangement extends React.Component {
 
 // Board spaces and reward pieces
   mappedBoard() {
+
+    // ADD LOGIC FOR ADDING REWARD PIECES ONTO BOARD
     let newBoard = []
 
     for (let i = 0; i < this.state.currentBoard.length; i++) {
@@ -166,6 +216,8 @@ class Arrangement extends React.Component {
     }
     return newBoard;
   }
+
+
 
   block(row, col) {
     let id = 'block' + row + '-' + col;
@@ -222,11 +274,17 @@ class Arrangement extends React.Component {
   //   e.target.appendChild(reward);
   //   // document.getElementById(id).appendChild(rewardPiece);
   // }
+  deleteReward(e, closeBtn){
+    e.preventDefault()
+
+    let reward = closeBtn.parentNode;
+    reward.parentNode.removeChild(reward);
+    this.updateBoard()
+  }
 
   render() {
     let deleteNodes = Object.values(document.getElementsByClassName('delete-reward'));
-    deleteNodes.map(el => el.addEventListener('click', function(e){e.preventDefault(); alert('hi')}))
-    
+    deleteNodes.map(el => el.addEventListener('click', e => this.deleteReward(e, el)))
     
     // .map(el => el.addEventListener('click', function(e){e.preventDefault(); alert('hi')}))
 
