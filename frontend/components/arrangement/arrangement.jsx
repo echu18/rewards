@@ -1,16 +1,17 @@
 // List all arrangements - name, view, edit
 import React from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
-import Draggable, { DraggableCore } from "react-draggable";
-import GridLayout from "react-grid-layout";
-import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+// import Draggable, { DraggableCore } from "react-draggable";
+// import GridLayout from "react-grid-layout";
+// import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+// import RGL, { WidthProvider } from "react-grid-layout";
+// const ReactGridLayout = WidthProvider(RGL);
+// import Block from "./block";
 
 import _ from "lodash";
-import RGL, { WidthProvider } from "react-grid-layout";
 
-const ReactGridLayout = WidthProvider(RGL);
 
-import Block from "./block";
+
 
 class Arrangement extends React.Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class Arrangement extends React.Component {
     this.drop_handler = this.drop_handler.bind(this);
 
     this.deleteReward = this.deleteReward.bind(this)
+    this.undo = this.undo.bind(this);
     // this.row = this.row.bind(this);
   }
 
@@ -84,13 +86,19 @@ class Arrangement extends React.Component {
 
   undo(){
     // Switch present/future boards
+
+    let futureBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
+    let newCurrentBoard = JSON.parse(JSON.stringify(this.state.pastBoard));
+
+    this.setState({pastBoard: [], currentBoard: newCurrentBoard, futureBoard: futureBoard}, () => this.parseSavedBoard());
   }
 
 
+  parseSavedBoard(){
+    
+  }
+
   updateBoard(){
-
-
-
     let pastBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
     let newBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
     
@@ -104,20 +112,11 @@ class Arrangement extends React.Component {
         let row = parseInt(block.dataset.row)
         let col = parseInt(block.dataset.col)
 
-
-        // switch (block.childElementCount){
-        //   case 0:
-        //     newBoard[row][col] = 0
-        //   case 1:
-        //     newBoard[row][col] = 1
-        // }
-
         newBoard[row][col] = block.childElementCount
       }
-    // After a drop or a delete, update the board
 
+    // After a drop or a delete, update the board
     this.setState({pastBoard: pastBoard, currentBoard: newBoard})
-    debugger
   }
 
 
@@ -126,7 +125,6 @@ class Arrangement extends React.Component {
   dragstart_handler(e) {
     console.log("dragStart");
     // Change the source element's background color to signify drag has started
-
     
     e.currentTarget.style.backgroundColor = "lightgreen";
 
@@ -137,13 +135,7 @@ class Arrangement extends React.Component {
     let data = JSON.stringify(obj);
     // ev.dataTransfer.setData("text/plain", ev.target.id);
     
-
-    
-    e.dataTransfer.setData("text/plain", data);
-    // e.dataTransfer.effectAllowed = 'move';
-    
-    // e.dataTransfer.dropEffect = 'move';
-    
+    e.dataTransfer.setData("text/plain", data);    
   }
 
   dragover_handler(ev) {
@@ -156,21 +148,17 @@ class Arrangement extends React.Component {
     ev.preventDefault();
     // Get the data, which is the id of the drop target
 
-      let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
-      let rewardRow = JSON.parse(ev.dataTransfer.getData("text")).row;
-
-
+    let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
+    let rewardRow = JSON.parse(ev.dataTransfer.getData("text")).row;
+    
     let reward = document.getElementById(rewardId);
-
+    
     let rewardSideBar = document.getElementById('reward-sidebar');
     let blockRow = ev.currentTarget.getAttribute("data-row");
-    let col = ev.currentTarget.getAttribute("data-col");
+    // let col = ev.currentTarget.getAttribute("data-col");
 
     if (rewardRow === blockRow && ev.target.childElementCount === 0) {
-
-      
       // If dragging from reward sidebar, copy the node. If dragging from board, move the node
-        
       // If reward still has its id from the original reward-block, then we'll need to make a copy of the piece
       // If reward has a unique id, it means it's been placed already, and subsequent drags will MOVE the piece, not copy
 
@@ -182,7 +170,6 @@ class Arrangement extends React.Component {
           
           nodeCopy.innerHTML += "<div class='delete-reward'>X</div>"
 
-
         ev.target.appendChild(nodeCopy);
       } else {
         ev.target.appendChild(reward);
@@ -190,7 +177,6 @@ class Arrangement extends React.Component {
 
       let newCount = this.state.pieceCounter += 1;
       this.setState({pieceCounter: newCount})
-
 
       this.updateBoard()
     } else {
@@ -202,10 +188,9 @@ class Arrangement extends React.Component {
 
 
 
+
 // Board spaces and reward pieces
   mappedBoard() {
-
-    // ADD LOGIC FOR ADDING REWARD PIECES ONTO BOARD
     let newBoard = []
 
     for (let i = 0; i < this.state.currentBoard.length; i++) {
@@ -216,8 +201,6 @@ class Arrangement extends React.Component {
     }
     return newBoard;
   }
-
-
 
   block(row, col) {
     let id = 'block' + row + '-' + col;
@@ -274,6 +257,9 @@ class Arrangement extends React.Component {
   //   e.target.appendChild(reward);
   //   // document.getElementById(id).appendChild(rewardPiece);
   // }
+
+
+
   deleteReward(e, closeBtn){
     e.preventDefault()
 
@@ -336,6 +322,7 @@ class Arrangement extends React.Component {
         </div>
 
         <button>Save Arrangement</button>
+        <button onClick={this.undo}>Undo</button>
       </div>
     );
   }
