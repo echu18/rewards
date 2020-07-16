@@ -23,141 +23,173 @@ class Arrangement extends React.Component {
       // row3: [],
       // row4: [],
       // row5: [],
-      pastBoard: [],
-      currentBoard: [
+      pastBoardData: [],
+      currentBoardData: [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
       ],
-      futureBoard: [],
-      pieceCounter: 0
+      futureBoardData: [],
+      pieceCounter: 0,
+      currentBoardBlocks: []
     };
 
     this.dragover_handler = this.dragover_handler.bind(this);
     this.dragstart_handler = this.dragstart_handler.bind(this);
     this.drop_handler = this.drop_handler.bind(this);
 
-    this.createReward = this.createReward.bind(this)
-    this.deleteReward = this.deleteReward.bind(this)
+    this.createReward = this.createReward.bind(this);
+    this.deleteReward = this.deleteReward.bind(this);
     this.undo = this.undo.bind(this);
+    this.mappedBoard = this.mappedBoard.bind(this);
+    this.attachDeleteRewardListener = this.attachDeleteRewardListener.bind(this);
     // this.row = this.row.bind(this);
   }
 
-
-
-  componentDidMount(){
+  componentDidMount() {
     // if saved board configuration, map the configuration upon mount
     // this.props.boardConfig()
     const defaultBoard = [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-      ]
-      
-      if (!!(this.props.savedArrangement)) {
-        this.setState({currentBoard: savedArrangement})
-      } else {
-        this.setState({pastBoard: defaultBoard})
-      }
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ];
 
+    if (!!this.props.savedArrangement) {
+      this.setState({ currentBoardData: savedArrangement });
+      this.mappedBoard(savedArrangement)
+    } else {
+      // this.setState({ pastBoardData: defaultBoard });
+      this.mappedBoard(defaultBoard);
+    }
 
-      // If saved board exists, set it as the currentboard and then call parseSavedBoard()
-
+    // If saved board exists, set it as the currentboardData and then call parseBoard()
   }
-
-
 
   // translate coordinates into true/false for rewards hash
   // translate rewards hash back into true/false
 
-  // newBlock(e, rowNum, newBlock) {
-  //   e.preventDefault();
-  //   // let clickPos = (e.clientX / window.innerHeight) * 100;
-
-  //   // let xPos = Math.floor(clickPos / 100) * 100;
-  //   newBlock.setData(rowNum);
-
-  //   this.setState({
-  //     [rowNum]: this.state[rowNum].concat([newBlock]),
-  //   });
-
-  //   //if no coordinates are given
-  // }
 
 
+  // Undo pt. 1)
+  // Switch present/future boards
+  undo() {
+    // if (this.state.pastBoardData.length === 0) return;
+
+    let futureBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
+    let newCurrentBoardData = JSON.parse(JSON.stringify(this.state.pastBoardData));
+
+    this.setState({
+        pastBoardData: [],
+        currentBoardData: newCurrentBoardData,
+        futureBoardData: futureBoardData,
+      }, function(){
+        this.mappedBoard(newCurrentBoardData);
+      } );
+    // this.mappedBoard(newCurrentBoardData)
+  }
+
+  
+
+  updateBoard() {}
+
+  // After a drop or a delete, update the board
+  updateBoardData() {
+    let pastBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
+    let newBoard = JSON.parse(JSON.stringify(this.state.currentBoardData));
+
+    let boardBlocks = Object.values(
+      document.getElementsByClassName("board-block")
+    );
+
+    for (let i = 0; i < boardBlocks.length; i++) {
+      let block = boardBlocks[i];
+
+      let row = parseInt(block.dataset.row);
+      let col = parseInt(block.dataset.col);
+
+      newBoard[row][col] = block.childElementCount;
+    }
+
+    this.setState({ pastBoardData: pastBoardData, currentBoardData: newBoard });
+  }
 
 
-  undo(){
-    // Switch present/future boards
-    debugger
-    let futureBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
-    let newCurrentBoard = JSON.parse(JSON.stringify(this.state.pastBoard));
 
-    this.setState(
-      {
-        pastBoard: [],
-        currentBoard: newCurrentBoard,
-        futureBoard: futureBoard,
-      },
-      this.parseSavedBoard(this.state.pastBoard)
+  // Board spaces and reward pieces
+
+  // This just returns a board with blocks
+  // Iterates through board data and maps blocks and reward pieces
+
+  mappedBoard(boardData) {
+    // First, replace current board blocks with new blank board blocks
+    let newBoard = [];
+
+    for (let i = 0; i < boardData.length; i++) {     
+      let row = boardData[i].map((block, j) => {
+        return this.block(i, j)
+      })
+      newBoard.push(row);
+    }
+    this.setState({currentBoardBlocks: newBoard}, () => mapRewards(this.createReward, this.attachDeleteRewardListener));
+
+
+    // Next, grab all the new blank blocks we just mapped and iterate thru to append reward pieces
+    function mapRewards(createReward, attachDeleteRewardListener){
+      let flattenedData = boardData.flat(); // Need to flatten boardData since its a nested array, whereas the boardBlocks we grab by className is just one big arr
+      
+      let boardBlocks = document.getElementsByClassName('board-block');
+
+        for (let i = 0; i < flattenedData.length; i++) {     
+            let newBlock = boardBlocks[i];
+            let row = Math.floor((i+1)/5)
+            
+            if (flattenedData[i] === 1) { 
+              if (newBlock.childElementCount < 1) {
+                console.log(this)
+                let reward = createReward(null, row);
+                reward.setAttribute("data-row", row);
+                newBlock.appendChild(reward);
+                attachDeleteRewardListener();
+              }
+            } else if (flattenedData[i] === 0) {
+              if (newBlock.childElementCount > 0) {
+                for (let j=0; j < newBlock.childElementCount; j++){
+                  newBlock.removeChild(newBlock.children[j])
+                }
+              }
+            }
+          }
+        } 
+  }
+  
+
+  block(row, col) {
+    let id = "block" + row + "-" + col;
+
+    return (
+      <div
+        id={id}
+        className="board-block"
+        data-row={row}
+        data-col={col}
+        onDrop={(event) => this.drop_handler(event)}
+        onDragOver={(event) => this.dragover_handler(event)}
+        // onDoubleClick={(e) => this.addReward(e, row)}
+      >
+        {row}-{col}
+      </div>
     );
   }
 
 
-  parseSavedBoard(savedBoard){
-    // let savedBoard = this.state.currentBoard;
-  let mappedBoard = this.mappedBoard();
-
-  Object.values(mappedBoard)[row][col] // ITERATE THRU THIS BOARD DATA AND MAP PHYSICAL REWARD PIECES
-  debugger;
 
 
 
-    for (let i=0; i < savedBoard.length; i++) {
-      for (let j=0; j < 5; j++) {
-        if (savedBoard[i][j] === '1') {
-          let reward = this.createReward(null, i);
-          reward.setAttribute('data-row', i)
-
-          savedBoard[i][j] = reward;
-        }
-      }
-    }
-
-    // create reward
-    // append it to find by id: block-row-col
-  }
-
-
-  updateBoard() {
-
-  }
-
-
-
-  updateBoardData(){
-    let pastBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
-    let newBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
-
-    
-    let boardBlocks = Object.values(document.getElementsByClassName('board-block'));
-
-    for (let i=0; i < boardBlocks.length; i++) {
-        let block = boardBlocks[i];
-
-        let row = parseInt(block.dataset.row)
-        let col = parseInt(block.dataset.col)
-
-        newBoard[row][col] = block.childElementCount
-      }
-      
-    // After a drop or a delete, update the board
-    this.setState({pastBoard: pastBoard, currentBoard: newBoard})
-  }
 
 
 
@@ -165,17 +197,17 @@ class Arrangement extends React.Component {
   dragstart_handler(e) {
     console.log("dragStart");
     // Change the source element's background color to signify drag has started
-    
+
     e.currentTarget.style.backgroundColor = "lightgreen";
 
     // Set the drag's format and data. Use the event target's id for the data
     // Since we're transferring an object, we'll convert it into JSON so it can be stored (will be parsed again on drop_handler)
-    
+
     let obj = { row: e.target.dataset.row, id: e.target.id };
     let data = JSON.stringify(obj);
     // ev.dataTransfer.setData("text/plain", ev.target.id);
-    
-    e.dataTransfer.setData("text/plain", data);    
+
+    e.dataTransfer.setData("text/plain", data);
   }
 
   dragover_handler(ev) {
@@ -191,8 +223,8 @@ class Arrangement extends React.Component {
     let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
     let rewardRow = JSON.parse(ev.dataTransfer.getData("text")).row;
     let reward = document.getElementById(rewardId);
-    
-    let rewardSideBar = document.getElementById('reward-sidebar');
+
+    let rewardSideBar = document.getElementById("reward-sidebar");
     let blockRow = ev.currentTarget.getAttribute("data-row");
     // let col = ev.currentTarget.getAttribute("data-col");
 
@@ -201,19 +233,18 @@ class Arrangement extends React.Component {
       // If reward still has its id from the original reward-block, then we'll need to make a copy of the piece
       // If reward has a unique id, it means it's been placed already, and subsequent drags will MOVE the piece, not copy
 
-        if (Object.values(rewardSideBar.children).includes(reward)) {
-
-        let nodeCopy = this.createReward(rewardId, null)
+      if (Object.values(rewardSideBar.children).includes(reward)) {
+        let nodeCopy = this.createReward(rewardId, null);
 
         ev.target.appendChild(nodeCopy);
       } else {
         ev.target.appendChild(reward);
       }
 
-      let newCount = this.state.pieceCounter += 1;
-      this.setState({pieceCounter: newCount})
+      let newCount = (this.state.pieceCounter += 1);
+      this.setState({ pieceCounter: newCount });
 
-      this.updateBoardData()
+      this.updateBoardData();
     } else {
       return;
     }
@@ -221,8 +252,7 @@ class Arrangement extends React.Component {
     ev.dataTransfer.clearData();
   }
 
-
-  createReward(rewardId, row){
+  createReward(rewardId, row) {
     let nodeCopy;
 
     rewardId = rewardId || row;
@@ -234,60 +264,40 @@ class Arrangement extends React.Component {
     nodeCopy.id = `reward-piece-${this.state.pieceCounter}`; // Give the reward piece a unique id once it's been dragged onto the board
 
     nodeCopy.innerHTML += "<div class='delete-reward'>X</div>";
-    
+
     return nodeCopy;
   }
 
-
-
-// Board spaces and reward pieces
-  mappedBoard() {
-    let newBoard = []
-
-    for (let i = 0; i < this.state.currentBoard.length; i++) {
-      let row = this.state.currentBoard[i].map((block, j) =>
-        this.block(i, j)
-      );
-      newBoard.push(row)
-    }
-    return newBoard;
-  }
-
-  block(row, col) {
-    let id = 'block' + row + '-' + col;
-
-    return (
-      <div id={id} className="board-block" data-row={row} data-col={col} onDrop={(event) => this.drop_handler(event)} onDragOver={(event) => this.dragover_handler(event)} onDoubleClick={e =>this.addReward(e, row)}>
-        {row}-{col}
-      </div>
-    );
-  }
-
-
-
-
-  deleteReward(e, closeBtn){
+  deleteReward(e, closeBtn) {
     // Removes reward piece from the board and updates rendering of board
-    e.preventDefault()
+    e.preventDefault();
 
     let reward = closeBtn.parentNode;
 
     if (!!reward.parentNode) {
-      reward.parentNode.removeChild(reward) 
+      reward.parentNode.removeChild(reward);
     }
-
     this.updateBoardData();
   }
 
+  attachDeleteRewardListener(){
+    let deleteNodes = Object.values(
+      document.getElementsByClassName("delete-reward")
+    );
+    deleteNodes.map((el) =>
+      el.addEventListener("click", (e) => this.deleteReward(e, el))
+    );
+  }
+
   render() {
-    let deleteNodes = Object.values(document.getElementsByClassName('delete-reward'));
-    deleteNodes.map(el => el.addEventListener('click', e => this.deleteReward(e, el)))
-    
-    // .map(el => el.addEventListener('click', function(e){e.preventDefault(); alert('hi')}))
+    // let deleteNodes = Object.values(
+    //   document.getElementsByClassName("delete-reward")
+    // );
+    // deleteNodes.map((el) =>
+    //   el.addEventListener("click", (e) => this.deleteReward(e, el))
+    // );
 
-
-
-
+    this.attachDeleteRewardListener();
 
     return (
       <div className="arrangement-container">
@@ -305,37 +315,86 @@ class Arrangement extends React.Component {
             <div id="reward-box-3" className='reward-placemark'>R4</div>
             <div id="reward-box-4" className='reward-placemark'>R5</div> */}
 
-
-            <div id='reward-sidebar'>
-              <div id="0" className="reward-block" data-row='0' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R1</div>
-              <div id="1" className="reward-block" data-row='1' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
-              <div id="2" className="reward-block" data-row='2' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
-              <div id="3" className="reward-block" data-row='3' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R4</div>
-              <div id="4" className="reward-block" data-row='4' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R5</div>
+            <div id="reward-sidebar">
+              <div
+                id="0"
+                className="reward-block"
+                data-row="0"
+                onDragStart={(event) => this.dragstart_handler(event)}
+                draggable="true"
+              >
+                R1
+              </div>
+              <div
+                id="1"
+                className="reward-block"
+                data-row="1"
+                onDragStart={(event) => this.dragstart_handler(event)}
+                draggable="true"
+              >
+                R2
+              </div>
+              <div
+                id="2"
+                className="reward-block"
+                data-row="2"
+                onDragStart={(event) => this.dragstart_handler(event)}
+                draggable="true"
+              >
+                R3
+              </div>
+              <div
+                id="3"
+                className="reward-block"
+                data-row="3"
+                onDragStart={(event) => this.dragstart_handler(event)}
+                draggable="true"
+              >
+                R4
+              </div>
+              <div
+                id="4"
+                className="reward-block"
+                data-row="4"
+                onDragStart={(event) => this.dragstart_handler(event)}
+                draggable="true"
+              >
+                R5
+              </div>
             </div>
-
-
-
 
             {/* <div id="r-1" className="reward-block" data-row='0' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R1</div>
             <div id="r-2" className="reward-block" data-row='1' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
             <div id="r-3" className="reward-block" data-row='2' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
             <div id="r-4" className="reward-block" data-row='3' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R4</div>
             <div id="r-5" className="reward-block" data-row='4' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R5</div> */}
-    
           </div>
 
           <div className="categories">
             <h3>Categories</h3>
-            <div className="inner-grid">{this.mappedBoard()}</div>
+            <div className="inner-grid">{this.state.currentBoardBlocks}</div>
           </div>
         </div>
 
         <button>Save Arrangement</button>
-        <button onClick={this.undo}>Undo</button>
+        {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
+        <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button>
       </div>
     );
   }
 }
 
 export default Arrangement;
+
+
+
+// Save just in case I mess up
+  // mappedBoard() {
+  //   let newBoard = [];
+
+  //   for (let i = 0; i < this.state.currentBoardData.length; i++) {
+  //     let row = this.state.currentBoard[i].map((block, j) => this.block(i, j));
+  //     newBoard.push(row);
+  //   }
+  //   return newBoard;
+  // }
