@@ -211,3 +211,52 @@ class Arrangement extends React.Component {
 
 
 export default Arrangement;
+
+
+
+
+
+
+  
+
+  // createReward(row){
+
+  //   // let reward = document.createElement('div');
+  //   // reward.setAttribute("id", `r-${row}`);
+  //   // reward.setAttribute("className", "reward-block");
+  //   // reward.setAttribute("data-row", row);
+  //   // // reward.setAttribute("onDragStart", 'this.dragstart_handler');
+  //   // reward.setAttribute("draggable", true);
+  //   // reward.innerHTML = `R${row}`
+
+  //   // document.getElementById(`r-${row}`).addEventListener('dragstart', e=> this.dragover_handler(e))
+
+
+
+  //   return (<div id={"r-"+row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>)
+  // }
+
+
+  // addReward(e, row){
+  //   e.preventDefault();
+
+  // let reward = document.createElement('div');
+  //   reward.setAttribute("id", `r-${row}`);
+  //   reward.setAttribute("className", "reward-block");
+  //   reward.setAttribute("data-row", row);
+  //   reward.setAttribute("ondragstart", `this.dragstart_handler(${e})`);
+  //   reward.setAttribute("draggable", true);
+  //   reward.innerHTML = `R${row}`
+
+  //   // reward.addEventListener('dragstart', function(e){
+  //   //   e.preventDefault()
+  //   //   this.dragstart_handler(e)
+  //   // })
+
+  //   // reward.innerHTML = `<div id={"r-" + row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>`;
+    
+    
+  //   // let rewardPiece = <div id={"r-" + row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>
+  //   e.target.appendChild(reward);
+  //   // document.getElementById(id).appendChild(rewardPiece);
+  // }

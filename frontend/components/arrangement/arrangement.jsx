@@ -39,6 +39,7 @@ class Arrangement extends React.Component {
     this.dragstart_handler = this.dragstart_handler.bind(this);
     this.drop_handler = this.drop_handler.bind(this);
 
+    this.createReward = this.createReward.bind(this)
     this.deleteReward = this.deleteReward.bind(this)
     this.undo = this.undo.bind(this);
     // this.row = this.row.bind(this);
@@ -63,6 +64,9 @@ class Arrangement extends React.Component {
         this.setState({pastBoard: defaultBoard})
       }
 
+
+      // If saved board exists, set it as the currentboard and then call parseSavedBoard()
+
   }
 
 
@@ -84,27 +88,63 @@ class Arrangement extends React.Component {
   //   //if no coordinates are given
   // }
 
+
+
+
   undo(){
     // Switch present/future boards
-
+    debugger
     let futureBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
     let newCurrentBoard = JSON.parse(JSON.stringify(this.state.pastBoard));
 
-    this.setState({pastBoard: [], currentBoard: newCurrentBoard, futureBoard: futureBoard}, () => this.parseSavedBoard());
+    this.setState(
+      {
+        pastBoard: [],
+        currentBoard: newCurrentBoard,
+        futureBoard: futureBoard,
+      },
+      this.parseSavedBoard(this.state.pastBoard)
+    );
   }
 
 
-  parseSavedBoard(){
-    
+  parseSavedBoard(savedBoard){
+    // let savedBoard = this.state.currentBoard;
+  let mappedBoard = this.mappedBoard();
+
+  Object.values(mappedBoard)[row][col] // ITERATE THRU THIS BOARD DATA AND MAP PHYSICAL REWARD PIECES
+  debugger;
+
+
+
+    for (let i=0; i < savedBoard.length; i++) {
+      for (let j=0; j < 5; j++) {
+        if (savedBoard[i][j] === '1') {
+          let reward = this.createReward(null, i);
+          reward.setAttribute('data-row', i)
+
+          savedBoard[i][j] = reward;
+        }
+      }
+    }
+
+    // create reward
+    // append it to find by id: block-row-col
   }
 
-  updateBoard(){
+
+  updateBoard() {
+
+  }
+
+
+
+  updateBoardData(){
     let pastBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
     let newBoard = JSON.parse(JSON.stringify(this.state.currentBoard));
+
     
-
     let boardBlocks = Object.values(document.getElementsByClassName('board-block'));
-
 
     for (let i=0; i < boardBlocks.length; i++) {
         let block = boardBlocks[i];
@@ -114,7 +154,7 @@ class Arrangement extends React.Component {
 
         newBoard[row][col] = block.childElementCount
       }
-
+      
     // After a drop or a delete, update the board
     this.setState({pastBoard: pastBoard, currentBoard: newBoard})
   }
@@ -150,7 +190,6 @@ class Arrangement extends React.Component {
 
     let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
     let rewardRow = JSON.parse(ev.dataTransfer.getData("text")).row;
-    
     let reward = document.getElementById(rewardId);
     
     let rewardSideBar = document.getElementById('reward-sidebar');
@@ -164,11 +203,7 @@ class Arrangement extends React.Component {
 
         if (Object.values(rewardSideBar.children).includes(reward)) {
 
-          let nodeCopy = $(reward).clone(true, true)[0];
-          nodeCopy.ondragstart = e => this.dragstart_handler(e);
-          nodeCopy.id = `reward-piece-${this.state.pieceCounter}`; // Give the reward piece a unique id once it's been dragged onto the board
-          
-          nodeCopy.innerHTML += "<div class='delete-reward'>X</div>"
+        let nodeCopy = this.createReward(rewardId, null)
 
         ev.target.appendChild(nodeCopy);
       } else {
@@ -178,14 +213,30 @@ class Arrangement extends React.Component {
       let newCount = this.state.pieceCounter += 1;
       this.setState({pieceCounter: newCount})
 
-      this.updateBoard()
+      this.updateBoardData()
     } else {
       return;
     }
     // Clear the drag data cache (for all formats/types)
-    // ev.dataTransfer.clearData();
+    ev.dataTransfer.clearData();
   }
 
+
+  createReward(rewardId, row){
+    let nodeCopy;
+
+    rewardId = rewardId || row;
+
+    let reward = document.getElementById(rewardId);
+
+    nodeCopy = $(reward).clone(true, true)[0];
+    nodeCopy.ondragstart = (e) => this.dragstart_handler(e);
+    nodeCopy.id = `reward-piece-${this.state.pieceCounter}`; // Give the reward piece a unique id once it's been dragged onto the board
+
+    nodeCopy.innerHTML += "<div class='delete-reward'>X</div>";
+    
+    return nodeCopy;
+  }
 
 
 
@@ -214,58 +265,18 @@ class Arrangement extends React.Component {
 
 
 
-  
-
-  // createReward(row){
-
-  //   // let reward = document.createElement('div');
-  //   // reward.setAttribute("id", `r-${row}`);
-  //   // reward.setAttribute("className", "reward-block");
-  //   // reward.setAttribute("data-row", row);
-  //   // // reward.setAttribute("onDragStart", 'this.dragstart_handler');
-  //   // reward.setAttribute("draggable", true);
-  //   // reward.innerHTML = `R${row}`
-
-  //   // document.getElementById(`r-${row}`).addEventListener('dragstart', e=> this.dragover_handler(e))
-
-
-
-  //   return (<div id={"r-"+row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>)
-  // }
-
-
-  // addReward(e, row){
-  //   e.preventDefault();
-
-  // let reward = document.createElement('div');
-  //   reward.setAttribute("id", `r-${row}`);
-  //   reward.setAttribute("className", "reward-block");
-  //   reward.setAttribute("data-row", row);
-  //   reward.setAttribute("ondragstart", `this.dragstart_handler(${e})`);
-  //   reward.setAttribute("draggable", true);
-  //   reward.innerHTML = `R${row}`
-
-  //   // reward.addEventListener('dragstart', function(e){
-  //   //   e.preventDefault()
-  //   //   this.dragstart_handler(e)
-  //   // })
-
-  //   // reward.innerHTML = `<div id={"r-" + row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>`;
-    
-    
-  //   // let rewardPiece = <div id={"r-" + row} className="reward-block" data-row={row} onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R{row}</div>
-  //   e.target.appendChild(reward);
-  //   // document.getElementById(id).appendChild(rewardPiece);
-  // }
-
-
 
   deleteReward(e, closeBtn){
+    // Removes reward piece from the board and updates rendering of board
     e.preventDefault()
 
     let reward = closeBtn.parentNode;
-    reward.parentNode.removeChild(reward);
-    this.updateBoard()
+
+    if (!!reward.parentNode) {
+      reward.parentNode.removeChild(reward) 
+    }
+
+    this.updateBoardData();
   }
 
   render() {
@@ -306,7 +317,6 @@ class Arrangement extends React.Component {
 
 
 
-            // Saved reward pieces - singular
             {/* <div id="r-1" className="reward-block" data-row='0' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R1</div>
             <div id="r-2" className="reward-block" data-row='1' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
             <div id="r-3" className="reward-block" data-row='2' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
