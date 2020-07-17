@@ -302,8 +302,11 @@ class Arrangement extends React.Component {
   deleteReward(e, closeBtn) {
     // Removes reward piece from the board and updates rendering of board
     e.preventDefault();
-    
-    this.updateBoardData();
+
+    this.setState({futureBoardData: []}, () =>  this.updateBoardData())
+
+
+    // this.updateBoardData();
 
     let reward = closeBtn.parentNode;
 
