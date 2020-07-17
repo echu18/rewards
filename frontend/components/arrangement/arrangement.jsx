@@ -43,6 +43,7 @@ class Arrangement extends React.Component {
     this.createReward = this.createReward.bind(this);
     this.deleteReward = this.deleteReward.bind(this);
     this.undo = this.undo.bind(this);
+    this.redo = this.redo.bind(this);
     this.mappedBoard = this.mappedBoard.bind(this);
     this.attachDeleteRewardListener = this.attachDeleteRewardListener.bind(this);
     // this.row = this.row.bind(this);
@@ -79,10 +80,9 @@ class Arrangement extends React.Component {
   // Switch present/future boards
   undo() {
     // if (this.state.pastBoardData.length === 0) return;
-
     let futureBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
     let newCurrentBoardData = JSON.parse(JSON.stringify(this.state.pastBoardData));
-
+    debugger
     this.setState({
         pastBoardData: [],
         currentBoardData: newCurrentBoardData,
@@ -90,12 +90,26 @@ class Arrangement extends React.Component {
       }, function(){
         this.mappedBoard(newCurrentBoardData);
       } );
-    // this.mappedBoard(newCurrentBoardData)
+  }
+
+  redo() {
+    debugger
+    // if (this.state.pastBoardData.length === 0) return;
+    let pastBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
+    let newCurrentBoardData = JSON.parse(JSON.stringify(this.state.futureBoardData));
+    
+    this.setState({
+        pastBoardData: pastBoardData,
+        currentBoardData: newCurrentBoardData,
+        futureBoardData: [],
+      }, function(){
+        this.mappedBoard(this.state.currentBoardData);
+      } );
   }
 
   
 
-  updateBoard() {}
+  // updateBoard() {}
 
   // After a drop or a delete, update the board
   updateBoardData() {
@@ -146,11 +160,23 @@ class Arrangement extends React.Component {
 
         for (let i = 0; i < flattenedData.length; i++) {     
             let newBlock = boardBlocks[i];
-            let row = Math.floor((i+1)/5)
+            let row;
+
+            if (i <= 5){
+              row = 0
+            } else if (i > 5 && i <= 10) {
+              row = 1
+            } else if (i > 10 && i <= 15) {
+              row = 2
+            } else if (i > 15 && i <= 20){
+              row = 3
+            } else {
+              row = 4;
+            }
             
             if (flattenedData[i] === 1) { 
               if (newBlock.childElementCount < 1) {
-                console.log(this)
+                     debugger
                 let reward = createReward(null, row);
                 reward.setAttribute("data-row", row);
                 newBlock.appendChild(reward);
@@ -196,6 +222,7 @@ class Arrangement extends React.Component {
   // Drag handlers
   dragstart_handler(e) {
     console.log("dragStart");
+    debugger
     // Change the source element's background color to signify drag has started
 
     e.currentTarget.style.backgroundColor = "lightgreen";
@@ -259,6 +286,10 @@ class Arrangement extends React.Component {
 
     let reward = document.getElementById(rewardId);
 
+    let newCount = (this.state.pieceCounter += 1);
+    this.setState({ pieceCounter: newCount });
+
+
     nodeCopy = $(reward).clone(true, true)[0];
     nodeCopy.ondragstart = (e) => this.dragstart_handler(e);
     nodeCopy.id = `reward-piece-${this.state.pieceCounter}`; // Give the reward piece a unique id once it's been dragged onto the board
@@ -271,13 +302,14 @@ class Arrangement extends React.Component {
   deleteReward(e, closeBtn) {
     // Removes reward piece from the board and updates rendering of board
     e.preventDefault();
+    
+    this.updateBoardData();
 
     let reward = closeBtn.parentNode;
 
     if (!!reward.parentNode) {
       reward.parentNode.removeChild(reward);
     }
-    this.updateBoardData();
   }
 
   attachDeleteRewardListener(){
@@ -296,6 +328,18 @@ class Arrangement extends React.Component {
     // deleteNodes.map((el) =>
     //   el.addEventListener("click", (e) => this.deleteReward(e, el))
     // );
+
+    function checkCurrentEqualsFuture(state){
+      let current = Object.values(state.currentBoardData);
+      let future = Object.values(state.futureBoardData);
+      debugger
+      for (let i=0; i < current.length; i++){
+        if (current[i] !== future[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
 
     this.attachDeleteRewardListener();
 
@@ -379,6 +423,7 @@ class Arrangement extends React.Component {
         <button>Save Arrangement</button>
         {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
         <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button>
+        <button onClick={this.redo} disabled={this.state.futureBoardData.length === 0 ? true : !!checkCurrentEqualsFuture(this.state) ? true : false} >Redo</button>
       </div>
     );
   }
