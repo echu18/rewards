@@ -44,13 +44,13 @@ class Arrangement extends React.Component {
     this.attachDeleteRewardListener = this.attachDeleteRewardListener.bind(this);
 
     this.handleInput = this.handleInput.bind(this);
+    this.mapSavedBoard = this.mapSavedBoard.bind(this);
     // this.row = this.row.bind(this);
   }
 
   componentDidMount() {
     debugger
-    // if saved board configuration, map the configuration upon mount
-    // this.props.boardConfig()
+
     const defaultBoard = [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
@@ -59,20 +59,73 @@ class Arrangement extends React.Component {
       [0, 0, 0, 0, 0],
     ];
 
-    let arrangement = this.props.arrangement;
 
-    debugger
-    if (this.props.arrangements.length > 0) {
-      debugger
-      this.setState({ currentBoardData: savedArrangement });
-      this.mappedBoard(savedArrangement)
-    } else {
-      // this.setState({ pastBoardData: defaultBoard });
-      this.mappedBoard(defaultBoard);
-    }
 
-    // If saved board exists, set it as the currentboardData and then call parseBoard()
+    if (!!this.props.match.params.arrangementId || !!this.props.arrangement){
+      
+
+
+      this.props.fetchArrangement(this.props.match.params.arrangementId)
+        .then(() => {
+          let unparsedBoard = this.props.arrangement.board;
+
+          let parsedData = []
+
+          for (let i = 0; i < unparsedBoard.length; i++) {
+            let row = [];
+            for (let j = 0; j < 5; j++) {
+              row.push(parseInt(unparsedBoard[i][j]))
+            }
+            parsedData.push(row)
+          }
+
+        this.mapSavedBoard(parsedData)  
+        })
+
+
+      } else {
+        this.mappedBoard(defaultBoard);
+      }
+          // If saved board exists, set it as the currentboardData and then call parseBoard()
   }
+
+  mapSavedBoard(board) {
+    let savedBoard = Array.from(board);
+    this.mappedBoard(savedBoard)
+    this.setState({ currentBoardData: savedBoard });
+  }
+
+  // componentDidUpdate(prevProps){
+  //   if (prevProps.arrangement !== this.props.arrangement){
+      
+  //   const defaultBoard = [
+  //     [0, 0, 0, 0, 0],
+  //     [0, 0, 0, 0, 0],
+  //     [0, 0, 0, 0, 0],
+  //     [0, 0, 0, 0, 0],
+  //     [0, 0, 0, 0, 0],
+  //   ];
+
+  //     let savedBoard = this.props.arrangement.board;
+
+  //     debugger
+  //     if (!!savedBoard) {
+  //       debugger
+  //       this.setState({ currentBoardData: savedBoard });
+  //       this.mappedBoard(savedArrangement)
+  //     } else {
+  //       // this.setState({ pastBoardData: defaultBoard });
+  //       this.mappedBoard(defaultBoard);
+  //     }
+  //   }
+
+
+
+
+
+
+
+
 
   // translate coordinates into true/false for rewards hash
   // translate rewards hash back into true/false

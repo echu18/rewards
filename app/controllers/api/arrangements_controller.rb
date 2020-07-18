@@ -9,6 +9,7 @@ class Api::ArrangementsController < ApplicationController
     
     def show
         @arrangement = Arrangement.find(params[:id])
+        render :show
     end
 
 

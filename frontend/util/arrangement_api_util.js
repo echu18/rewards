@@ -20,12 +20,19 @@ export const getArrangement = (arrangementId) => {
     return $.ajax({
         url: `/api/arrangements/${arrangementId}`,
         method: 'GET',
-        data: { arrangementId },
-        success: function (data) {
-            if (data.errors) {
-                res.send(data.errors)
-            }
-        }
+        data: { arrangementId }
+        // ,
+        // success: function(data){
+        //     let parsedData = []
+        //     for (let i=0; i<data.board.length; i++){
+        //         let row = [];
+        //         for (let j = 0; j < 5; j++) {
+        //             row.push(parseInt(data.board[i][j]))
+        //         }
+        //         parsedData.push(row)
+        //     }
+        //     return parsedData;
+        // }
     })
 }
 

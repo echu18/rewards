@@ -4,12 +4,13 @@ export default (state = {}, action) => {
     Object.freeze(state);
     switch (action.type) {
         case RECEIVE_ARRANGEMENT:
-            return Object.assign({}, state, action.arrangement)
+            
+            return Object.assign({}, state, {[action.arrangement.id]: action.arrangement})
 
             case RECEIVE_ARRANGEMENTS:
                 const arrangements = {}
-                action.arrangements.forEach(product => {
-                    return arrangements[product.id] = product;
+                action.arrangements.forEach(arrangement => {
+                    return arrangements[arrangement.id] = arrangement;
                 });
                 return arrangements;
         default:
