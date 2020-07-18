@@ -6,8 +6,12 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  name       :string
-#  board      :string           default([]), is an Array
+#  r0         :string           default(""), not null
+#  r1         :string           default(""), not null
+#  r2         :string           default(""), not null
+#  r3         :string           default(""), not null
+#  r4         :string           default(""), not null
 #
 class Arrangement < ApplicationRecord
-    validates :name, :board, presence: true
+    validates :name, :r0, :r1, :r2, :r3, :r4, presence: true
 end

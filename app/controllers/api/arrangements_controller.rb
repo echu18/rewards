@@ -14,7 +14,11 @@ class Api::ArrangementsController < ApplicationController
 
 
     def create
-        @arrangement = Arrangement.new({name: arrangement_params[:name], board: JSON.parse(arrangement_params[:board])})
+        # @arrangement = Arrangement.new({name: arrangement_params[:name], board: JSON.parse(arrangement_params[:board])})
+        
+        @arrangement = Arrangement.new(arrangement_params)
+        
+        
         if @arrangement.save
             render :show
         else
@@ -29,13 +33,20 @@ class Api::ArrangementsController < ApplicationController
 
 
     def destroy
+        @arrangement = Arrangement.find(params[:id])
 
+        if @arrangement
+            @arrangement.destroy
+            render :show
+        else
+            render ['Could not find arrangement']
+        end
     end
 
     private
 
     def arrangement_params
-        params.require(:arrangement).permit(:name, :board)
+        params.require(:arrangement).permit(:name, :r0, :r1, :r2, :r3, :r4)
     end
 
 

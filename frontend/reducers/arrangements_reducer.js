@@ -4,7 +4,7 @@ export default (state = {}, action) => {
     Object.freeze(state);
     switch (action.type) {
         case RECEIVE_ARRANGEMENT:
-            
+            debugger
             return Object.assign({}, state, {[action.arrangement.id]: action.arrangement})
 
             case RECEIVE_ARRANGEMENTS:

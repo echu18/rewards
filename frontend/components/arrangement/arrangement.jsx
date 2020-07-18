@@ -1,13 +1,6 @@
 // List all arrangements - name, view, edit
 import React from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
-// import Draggable, { DraggableCore } from "react-draggable";
-// import GridLayout from "react-grid-layout";
-// import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
-// import RGL, { WidthProvider } from "react-grid-layout";
-// const ReactGridLayout = WidthProvider(RGL);
-// import Block from "./block";
-
 import _ from "lodash";
 
 
@@ -49,7 +42,7 @@ class Arrangement extends React.Component {
   }
 
   componentDidMount() {
-    debugger
+    
 
     const defaultBoard = [
       [0, 0, 0, 0, 0],
@@ -62,24 +55,30 @@ class Arrangement extends React.Component {
 
 
     if (!!this.props.match.params.arrangementId || !!this.props.arrangement){
-      
-
-
+    
       this.props.fetchArrangement(this.props.match.params.arrangementId)
         .then(() => {
-          let unparsedBoard = this.props.arrangement.board;
+          let arrangement = this.props.arrangement;
+          let parsedBoard = []
 
-          let parsedData = []
+          parsedBoard.push(JSON.parse(arrangement.r0))
+          parsedBoard.push(JSON.parse(arrangement.r1))
+          parsedBoard.push(JSON.parse(arrangement.r2))
+          parsedBoard.push(JSON.parse(arrangement.r3))
+          parsedBoard.push(JSON.parse(arrangement.r4))
 
-          for (let i = 0; i < unparsedBoard.length; i++) {
-            let row = [];
-            for (let j = 0; j < 5; j++) {
-              row.push(parseInt(unparsedBoard[i][j]))
-            }
-            parsedData.push(row)
-          }
+          debugger
+          // let parsedData = []
 
-        this.mapSavedBoard(parsedData)  
+          // for (let i = 0; i < unparsedBoard.length; i++) {
+          //   let row = [];
+          //   for (let j = 0; j < 5; j++) {
+          //     row.push(parseInt(unparsedBoard[i][j]))
+          //   }
+          //   parsedData.push(row)
+          // }
+          // debugger
+        this.mapSavedBoard(parsedBoard)  
         })
 
 
@@ -90,9 +89,9 @@ class Arrangement extends React.Component {
   }
 
   mapSavedBoard(board) {
-    let savedBoard = Array.from(board);
-    this.mappedBoard(savedBoard)
-    this.setState({ currentBoardData: savedBoard });
+    // let savedBoard = Array.from(board);
+    this.mappedBoard(board)
+    this.setState({ currentBoardData: board });
   }
 
   // componentDidUpdate(prevProps){
@@ -138,13 +137,17 @@ class Arrangement extends React.Component {
 
     save(e, board, name){
       
-      let boardArr = Object.assign({}, board)
+      // let boardRows = Object.assign({}, { r0: board[0], r1: board[1], r2: board[2], r3: board[3], r4: board[4]})
     
-      let data = JSON.stringify(board);
+      let r0 = JSON.stringify(board[0]);
+      let r1 = JSON.stringify(board[1]);
+      let r2 = JSON.stringify(board[2]);
+      let r3 = JSON.stringify(board[3]);
+      let r4 = JSON.stringify(board[4]);
       // boardArr.replace(/"/g, '');
-      
+      debugger
       e.preventDefault()
-      let arrangement = {board: data, name: name}
+      let arrangement = { r0: r0, r1: r1, r2: r2, r3: r3, r4: r4 , name: name}
       this.props.addArrangement(arrangement);
     }
 
@@ -426,7 +429,7 @@ class Arrangement extends React.Component {
     function checkCurrentEqualsFuture(state){
       let current = Object.values(state.currentBoardData);
       let future = Object.values(state.futureBoardData);
-      debugger
+      
       for (let i=0; i < current.length; i++){
         if (current[i] !== future[i]) {
           return false;

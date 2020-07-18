@@ -6,7 +6,11 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  name       :string
-#  board      :string           default([]), is an Array
+#  r0         :string           default(""), not null
+#  r1         :string           default(""), not null
+#  r2         :string           default(""), not null
+#  r3         :string           default(""), not null
+#  r4         :string           default(""), not null
 #
 
 # This model initially had no columns defined. If you add columns to the

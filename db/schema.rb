@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_17_222302) do
+ActiveRecord::Schema.define(version: 2020_07_18_233650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -20,7 +20,11 @@ ActiveRecord::Schema.define(version: 2020_07_17_222302) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.string "board", default: [], array: true
+    t.string "r0", default: "", null: false
+    t.string "r1", default: "", null: false
+    t.string "r2", default: "", null: false
+    t.string "r3", default: "", null: false
+    t.string "r4", default: "", null: false
   end
 
 end
