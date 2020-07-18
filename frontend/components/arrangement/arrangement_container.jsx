@@ -6,6 +6,7 @@ import {addArrangement, fetchAllArrangements, fetchArrangement, modifyArrangemen
 
 const mapStateToProps = (state, ownProps) => ({
   arrangements: state.arrangements,
+  arrangement: state.arrangements[ownProps.match.params.arrangementId],
   errors: state.errors
 });
 

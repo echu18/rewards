@@ -42,14 +42,14 @@ class Home extends React.Component {
             }
         } 
 
-        debugger
+        
         return (
             <div>
                 <h3>Saved Arrangements</h3>
                 <div>
                     {/* {fetchedArrangements(this.state.arrangements)} */}
                     {Object.values(this.state.arrangements).map((arrangement, i) => {
-                        return <h5 key={i}>{arrangement.name}</h5>
+                        return <Link to={`/arrangements/${arrangement.id}/edit`} arrangementId={arrangement.id} key={i}>{arrangement.name}</Link>
                     })}
                 </div>
                 

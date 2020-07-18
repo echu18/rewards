@@ -13,9 +13,8 @@ class Api::ArrangementsController < ApplicationController
 
 
     def create
-        @arrangement = Arrangement.new(arrangement_params)
+        @arrangement = Arrangement.new({name: arrangement_params[:name], board: JSON.parse(arrangement_params[:board])})
         if @arrangement.save
-            debugger
             render :show
         else
             render json: @arrangement.errors.full_messages, status: 401
@@ -35,7 +34,6 @@ class Api::ArrangementsController < ApplicationController
     private
 
     def arrangement_params
-        debugger
         params.require(:arrangement).permit(:name, :board)
     end
 

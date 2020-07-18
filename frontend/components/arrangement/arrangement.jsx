@@ -48,6 +48,7 @@ class Arrangement extends React.Component {
   }
 
   componentDidMount() {
+    debugger
     // if saved board configuration, map the configuration upon mount
     // this.props.boardConfig()
     const defaultBoard = [
@@ -58,7 +59,11 @@ class Arrangement extends React.Component {
       [0, 0, 0, 0, 0],
     ];
 
-    if (!!this.props.savedArrangement) {
+    let arrangement = this.props.arrangement;
+
+    debugger
+    if (this.props.arrangements.length > 0) {
+      debugger
       this.setState({ currentBoardData: savedArrangement });
       this.mappedBoard(savedArrangement)
     } else {
@@ -79,10 +84,14 @@ class Arrangement extends React.Component {
     }
 
     save(e, board, name){
-      let boardArr = JSON.stringify(board);
+      
+      let boardArr = Object.assign({}, board)
+    
+      let data = JSON.stringify(board);
+      // boardArr.replace(/"/g, '');
       
       e.preventDefault()
-      let arrangement = {board: boardArr, name: name}
+      let arrangement = {board: data, name: name}
       this.props.addArrangement(arrangement);
     }
 
