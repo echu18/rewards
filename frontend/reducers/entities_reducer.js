@@ -1,11 +1,10 @@
 import { combineReducers } from "redux";
+import arrangementsReducer from './arrangements_reducer';
+
 
 
 const entitiesReducer = combineReducers({
-//   users: usersReducer,
-//   products: productsReducer,
-//   cartItems: cartItemsReducer,
-//   reviews: reviewsReducer,
+    arrangementsReducer
 });
 
 export default entitiesReducer;

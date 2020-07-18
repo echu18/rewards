@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_11_020811) do
+ActiveRecord::Schema.define(version: 2020_07_17_222302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -19,12 +19,8 @@ ActiveRecord::Schema.define(version: 2020_07_11_020811) do
   create_table "arrangements", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.hstore "r1", default: {}, null: false
-    t.hstore "r2", default: {}, null: false
-    t.hstore "r3", default: {}, null: false
-    t.hstore "r4", default: {}, null: false
-    t.hstore "r5", default: {}, null: false
     t.string "name"
+    t.string "board", default: [], array: true
   end
 
 end

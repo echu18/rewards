@@ -18,11 +18,7 @@ class Arrangement extends React.Component {
     super(props);
     // this.state = {};
     this.state = {
-      // row1: [],
-      // row2: [],
-      // row3: [],
-      // row4: [],
-      // row5: [],
+      name: "",
       pastBoardData: [],
       currentBoardData: [
         [0, 0, 0, 0, 0],
@@ -46,6 +42,8 @@ class Arrangement extends React.Component {
     this.redo = this.redo.bind(this);
     this.mappedBoard = this.mappedBoard.bind(this);
     this.attachDeleteRewardListener = this.attachDeleteRewardListener.bind(this);
+
+    this.handleInput = this.handleInput.bind(this);
     // this.row = this.row.bind(this);
   }
 
@@ -74,6 +72,34 @@ class Arrangement extends React.Component {
   // translate coordinates into true/false for rewards hash
   // translate rewards hash back into true/false
 
+    handleInput(type) {
+      return (e) => {
+        this.setState({ [type]: e.target.value });
+      };
+    }
+
+    save(e, board, name){
+      let boardArr = JSON.stringify(board);
+      
+      e.preventDefault()
+      let arrangement = {board: boardArr, name: name}
+      this.props.addArrangement(arrangement);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // Undo pt. 1)
@@ -82,7 +108,8 @@ class Arrangement extends React.Component {
     // if (this.state.pastBoardData.length === 0) return;
     let futureBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
     let newCurrentBoardData = JSON.parse(JSON.stringify(this.state.pastBoardData));
-    debugger
+    
+    
     this.setState({
         pastBoardData: [],
         currentBoardData: newCurrentBoardData,
@@ -93,7 +120,8 @@ class Arrangement extends React.Component {
   }
 
   redo() {
-    debugger
+    
+    
     // if (this.state.pastBoardData.length === 0) return;
     let pastBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
     let newCurrentBoardData = JSON.parse(JSON.stringify(this.state.futureBoardData));
@@ -222,7 +250,8 @@ class Arrangement extends React.Component {
   // Drag handlers
   dragstart_handler(e) {
     console.log("dragStart");
-    debugger
+    
+    
     // Change the source element's background color to signify drag has started
 
     e.currentTarget.style.backgroundColor = "lightgreen";
@@ -427,6 +456,14 @@ class Arrangement extends React.Component {
         {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
         <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button>
         <button onClick={this.redo} disabled={this.state.futureBoardData.length === 0 ? true : !!checkCurrentEqualsFuture(this.state) ? true : false} >Redo</button>
+      
+
+
+
+        <label>Name this arrangement
+          <input type="text" onChange={this.handleInput('name')}/> 
+        </label>
+            <button onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save Arrangement</button>
       </div>
     );
   }
