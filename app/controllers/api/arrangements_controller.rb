@@ -28,7 +28,16 @@ class Api::ArrangementsController < ApplicationController
 
 
     def update
+        debugger
+        @arrangement = Arrangement.find_by(id: params[:id])
 
+        if @arrangement && @arrangement.update_attributes(arrangement_params)
+            render :show
+        elsif !@arrangement
+            render json: ['Could not find arrangement'], status: 400
+        else
+            render json: @arrangement.errors.full_messages, status: 401
+        end
     end
 
 

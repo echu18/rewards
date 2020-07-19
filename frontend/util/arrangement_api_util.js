@@ -36,11 +36,11 @@ export const getArrangement = (arrangementId) => {
     })
 }
 
-export const editArrangement = (arrangementId) => {
+export const editArrangement = (arrangementId, arrangementData) => {
     return $.ajax({
         url: `/api/arrangements/${arrangementId}`,
         method: 'PATCH',
-        data: { arrangementId }
+        data: { arrangement: arrangementData}
     })
 }
 

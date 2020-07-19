@@ -42,8 +42,6 @@ class Arrangement extends React.Component {
   }
 
   componentDidMount() {
-    
-
     const defaultBoard = [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
@@ -51,8 +49,6 @@ class Arrangement extends React.Component {
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ];
-
-
 
     if (!!this.props.match.params.arrangementId || !!this.props.arrangement){
       
@@ -78,13 +74,13 @@ class Arrangement extends React.Component {
       }
   }
 
-  mapSavedBoard(board) {
-    // let savedBoard = Array.from(board);
-    this.mappedBoard(board)
-    this.setState({ currentBoardData: board });
-  }
 
 
+    mapSavedBoard(board) {
+      // let savedBoard = Array.from(board);
+      this.mappedBoard(board)
+      this.setState({ currentBoardData: board });
+    }
 
     handleInput(type) {
       return (e) => {
@@ -93,18 +89,26 @@ class Arrangement extends React.Component {
     }
 
     save(e, board, name){
-      
-    
+      e.preventDefault();
+
+      let path = this.props.match.path;
+
       let r0 = JSON.stringify(board[0]);
       let r1 = JSON.stringify(board[1]);
       let r2 = JSON.stringify(board[2]);
       let r3 = JSON.stringify(board[3]);
       let r4 = JSON.stringify(board[4]);
       
-      
-      e.preventDefault()
       let arrangement = { r0: r0, r1: r1, r2: r2, r3: r3, r4: r4 , name: name}
-      this.props.addArrangement(arrangement);
+      debugger
+      switch (path){
+        case path.includes('create'):
+          this.props.addArrangement(arrangement);
+        case path.includes('edit'):
+          this.props.modifyArrangement(parseInt(this.props.match.params.arrangementId), arrangement)
+      }
+
+    debugger
     }
 
 
@@ -487,7 +491,6 @@ class Arrangement extends React.Component {
           </div>
         </div>
 
-        <button>Save Arrangement</button>
         {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
         {/* <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button> */}
         <button onClick={this.undo} disabled={this.state.pastBoardData.length === 0 ? true : !!checkFutureEqualsPast(this.state) ? true : false} >Undo</button>

@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchArrangement: (arrangementId) => dispatch(fetchArrangement(arrangementId)),
   fetchArrangements: () => dispatch(fetchAllArrangements()),
   addArrangement: (arrangement) => dispatch(addArrangement(arrangement)),
-  modifyArrangement: (arrangementId) => dispatch(modifyArrangement(arrangementId)),
+  modifyArrangement: (arrangementId, arrangement) => dispatch(modifyArrangement(arrangementId, arrangement)),
   destroyArrangement: (arrangementId) => dispatch(destroyArrangement(arrangementId)),
   clearErrors: () => dispatch(clearErrors())
 });
