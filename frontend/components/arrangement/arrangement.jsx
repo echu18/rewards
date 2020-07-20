@@ -79,7 +79,7 @@ class Arrangement extends React.Component {
 
 
   componentDidUpdate(prevProps, prevState){
-    debugger
+    
     if (prevState.currentBoardData !== this.state.currentBoardData){
       document.getElementById('save-btn').innerHTML = 'Save'
     }
@@ -380,23 +380,6 @@ class Arrangement extends React.Component {
 
     let rewardSideBar = document.getElementById("reward-sidebar");
     let blockRow = ev.currentTarget.getAttribute("data-row");
-
-
-
-    // debugger
-    // if (blockRow === "0") {
-    //   reward.style.backgroundColor = "lightgreen";
-    // } else if (blockRow === "1"){
-    //   reward.style.backgroundColor = "red";
-    // } else if (blockRow === "2"){
-    //     reward.style.backgroundColor = "blue";
-    // } else if (blockRow === "3"){
-    //     reward.style.backgroundColor = "pink";
-    // } else {
-    //     reward.style.backgroundColor = "orange";
-    // }
-    
-
 
 
     if (rewardRow === blockRow && ev.target.childElementCount === 0) {

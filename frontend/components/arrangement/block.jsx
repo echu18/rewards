@@ -18,7 +18,6 @@ class Block extends React.Component {
 
   handleDrag = (e, ui) => {
     const { x, y } = this.state.deltaPosition;
-    debugger
     this.setState({
       deltaPosition: {
         x: x + ui.deltaX,

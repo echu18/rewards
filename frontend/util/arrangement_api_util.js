@@ -8,7 +8,6 @@ export const allArrangements = () => {
 
 
 export const createArrangement = (arrangementData) => {
-    debugger
     return $.ajax({
         url: `/api/arrangements`,
         method: 'POST',
