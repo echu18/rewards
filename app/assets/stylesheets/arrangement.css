@@ -204,6 +204,7 @@
         align-items: center;
         font-size: 14px;
         width: 290px;
+        margin-top: -5px;
     }
     
     .action-panel > input[type="text"] {
@@ -217,29 +218,50 @@
     }
 
 
-
+    .save-delete-btns {
+        display: flex;
+        justify-content: space-around;
+        width: 150px;
+        margin-top: -5px;
+        margin-left: -15px;
+    }
 
     #save-btn {
         display: flex;
+        justify-content: center;
         box-sizing: border-box;
-        /* width: 200px; */
         height: 30px;
+        width: 70px;
         border-style: none;
         background-color: #41aa44;
         color: white;
-        /* padding: 10px; */
         border-radius: 3px;
         font-size: 12px;
-        margin-top: -5px;
-        /* margin-top: 5px;
-        margin-bottom: 5px; */
     }
 
+    
     #save-btn:hover {
         cursor: pointer;
         background-color: #4ec251;
     }
+    
+    #delete-btn {
+        display: flex;
+        justify-content: center;
+        box-sizing: border-box;
+        height: 30px;
+        width: 70px;
+        border-style: none;
+        background-color: #3d3d3d;
+        color: white;
+        border-radius: 3px;
+        font-size: 12px;
+    }
 
+      #delete-btn:hover {
+        cursor: pointer;
+        background-color: #696969;
+    }
 
 
  /* .row-1, .row-2, .row-3, .row-4, .row-5 {

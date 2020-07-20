@@ -38,6 +38,9 @@ class Arrangement extends React.Component {
 
     this.handleInput = this.handleInput.bind(this);
     this.mapSavedBoard = this.mapSavedBoard.bind(this);
+
+    this.save = this.save.bind(this);
+    this.delete = this.delete.bind(this);
     // this.row = this.row.bind(this);
   }
 
@@ -78,7 +81,7 @@ class Arrangement extends React.Component {
   componentDidUpdate(prevProps, prevState){
     debugger
     if (prevState.currentBoardData !== this.state.currentBoardData){
-      document.getElementById('save-btn').innerHTML = 'Save Arrangement'
+      document.getElementById('save-btn').innerHTML = 'Save'
     }
 
     if (prevState.name !== this.state.name){
@@ -128,23 +131,14 @@ class Arrangement extends React.Component {
         document.getElementById('save-btn').innerHTML = 'Saved.'
     }
 
+    delete(e) {
+      e.preventDefault();
+      let arrangementId = this.props.match.params.arrangementId;
+      this.props.destroyArrangement(arrangementId);
+
+      this.props.history.push('/');
+    }
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Undo pt. 1)
   // Switch present/future boards
@@ -571,7 +565,11 @@ class Arrangement extends React.Component {
               <label>Name this arrangement:
                 <input id='name-input' type="text" onChange={this.handleInput('name')} value={!!this.state.name ? this.state.name : null}/> 
               </label>
-              <button id='save-btn' onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save Arrangement</button>
+
+              <div className='save-delete-btns'>
+                <button id='save-btn' onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save</button>
+                {this.props.match.path.includes('edit') ? <button id='delete-btn' onClick={e=>this.delete(e)}>Delete</button> : null }
+              </div>
           
           </div>
       </div>

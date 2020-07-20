@@ -51,7 +51,8 @@ class Home extends React.Component {
         return (
             <div className='home-container'>
                 <h3>Saved Arrangements</h3>
-                <p>Click to view / edit.</p>
+                <p>Click 'Rewards Map' to return to Home.</p>
+                <p>Click or Scroll to view / edit.</p>
                 <div className='saved-arrangement-list'>
                     {/* {fetchedArrangements(this.state.arrangements)} */}
                     {Object.values(this.state.arrangements).map((arrangement, i) => {

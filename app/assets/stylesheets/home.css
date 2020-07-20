@@ -16,12 +16,14 @@
 
 
 .home-container h3 {
+    color: rgb(61, 61, 61);
     font-size: 16px;
     text-transform: uppercase;
-    margin: 10px 5px;
+    margin: 20px 5px;
 }
 
 .home-container p {
+    color: rgb(112, 112, 112);
     font-size: 14px;
     margin: 5px;
 }
