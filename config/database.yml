@@ -74,12 +74,13 @@ test:
 #   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
 #
 # You can use this database configuration with:
-#
-#   production:
-#     url: <%= ENV['DATABASE_URL'] %>
-#
-production:
-  <<: *default
-  database: rewards_production
-  username: rewards
-  password: <%= ENV['REWARDS_DATABASE_PASSWORD'] %>
+
+  production:
+    url: <%= ENV['postgres://sgmtrpisgkvrls:5e506aca91af7f5d00c7e5c59740f866876dab700f77b01cc27b2f3743315994@ec2-50-16-198-4.compute-1.amazonaws.com:5432/d81fvl9ge13j06
+'] %>
+
+# production:
+#   <<: *default
+#   database: rewards_production
+#   username: rewards
+#   password: <%= ENV['REWARDS_DATABASE_PASSWORD'] %>
