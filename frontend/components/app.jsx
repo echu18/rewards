@@ -8,7 +8,6 @@ import ArrangementContainer from './arrangement/arrangement_container';
 
 const App = () => (
   <div id="app">
-    <span id="category-divider"></span>
     <h3>Rewards Map</h3>
     <div id="main">
       <Switch>

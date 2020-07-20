@@ -44,17 +44,20 @@ class Home extends React.Component {
 
         
         return (
-            <div>
+            <div className='home-container'>
                 <h3>Saved Arrangements</h3>
-                <div>
+                <p>Click to view/edit.</p>
+                <div className='saved-arrangement-list'>
                     {/* {fetchedArrangements(this.state.arrangements)} */}
                     {Object.values(this.state.arrangements).map((arrangement, i) => {
-                        return <Link to={`/arrangements/${arrangement.id}/edit`} arrangementId={arrangement.id} key={i}>{arrangement.name}</Link>
+                        return (<div className='saved-arrangement'>
+                            <Link to={`/arrangements/${arrangement.id}/edit`} arrangementId={arrangement.id} key={i}>{arrangement.name}</Link>
+                        </div>)
                     })}
                 </div>
                 
 
-                <Link to={'/create'}>Create New Arrangement</Link>
+                <div className='create-arrangement-btn'><Link to={'/create'}>Create New Arrangement</Link></div>
             </div>
         )
     }

@@ -1,0 +1,29 @@
+#app {
+    font-family: 'Mulish', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    align-items: center;
+    border: 1px solid fuchsia;
+    background-image: url("https://ec-storage.s3-us-west-1.amazonaws.com/reward-bg-2.png");
+    background-repeat: no-repeat;
+    /* background-position: bottom; */
+    background-position-y: bottom;
+    background-size: cover;
+/* background: -webkit-linear-gradient(top, rgba(131,199,131,1) 9%,rgba(82,177,82,1) 39%,rgba(0,138,0,1) 85%); Chrome10-25,Safari5.1-6 */
+
+}
+
+#app > h3 {
+    margin: 20px;
+    font-size: 32px;
+}
+
+#main {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    height: 100%;
+
+}
