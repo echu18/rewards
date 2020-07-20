@@ -11,6 +11,7 @@ class Home extends React.Component {
             fetched: false
         }
         this.createNew = this.createNew.bind(this)
+        this.redirectTo = this.redirectTo.bind(this)
     }
     
     componentDidMount(){
@@ -27,6 +28,11 @@ class Home extends React.Component {
         this.props.history.push('/create')
     }
 
+
+    redirectTo(e, url){
+        e.preventDefault()
+        this.props.history.push(url)
+    }
 
     render() {
         // if (!this.props.arrangements) return null;
@@ -56,8 +62,8 @@ class Home extends React.Component {
                 <div className='saved-arrangement-list'>
                     {/* {fetchedArrangements(this.state.arrangements)} */}
                     {Object.values(this.state.arrangements).map((arrangement, i) => {
-                        return (<div className='saved-arrangement'>
-                            <Link to={`/arrangements/${arrangement.id}/edit`} arrangementId={arrangement.id} key={i}>{arrangement.name}</Link>
+                        return (<div className='saved-arrangement' onClick={e=> this.redirectTo(e, `/arrangements/${arrangement.id}/edit`)} >
+                            <div arrangementId={arrangement.id} key={i}>{arrangement.name}</div>
                         </div>)
                     })}
                 </div>
