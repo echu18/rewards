@@ -8,6 +8,8 @@
     border-radius: 3px;
     background-color: white;
     border: 1px solid gainsboro;
+    margin-top: 50px;
+    box-shadow: 0px 0px  7px 1px rgb(212, 212, 212);
 }
 
 .arrangement-container > h3 {
@@ -29,7 +31,7 @@
 .board-block {
     height: 100px;
     width: 100px;
-    border-bottom: 0.5px solid rgba(220, 220, 220, 0.4);
+    /* border-bottom: 0.5px solid rgba(220, 220, 220, 0.4); */
     border-right: 0.5px solid rgba(220, 220, 220, 0.7);
     border-left: 0.5px solid rgba(220, 220, 220, 0.7);
 }
@@ -49,38 +51,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/* .layout, .layout > div {
-    border: 1px solid red;
-} */
-
- /* .layout > div {
-     height: 100px;
-     width: 100px;
- } */
-
-
-
-
-
  .board > div {
      width: 100px;
  }
-
- .rewards > div, .categories > div{
-     /* border: 1px solid purple; */
- }
-
 
 
  .categories{
@@ -91,7 +64,7 @@
  }
 
   .categories > h3 {
-      font-size: 28px;
+      font-size: 24px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -103,10 +76,12 @@
     }
 
     .cat-header {
+        /* color: white; */
         display: flex;
         flex-direction: row;
         width: 500px;
         margin-bottom: 5px;
+        background-color: #ECECED;
     }
 
     .cat-header > p {
@@ -140,6 +115,10 @@
         margin-top: 50px;
     }
 
+    .rewards-header > h3 {
+        font-size: 18px;
+    }
+
 
     #reward-sidebar {
         display: flex;
@@ -162,7 +141,14 @@
         margin: 1px 0px;
         border-radius: 5px;
         border: 1px solid gainsboro;
+        opacity: 0.7;
     }
+
+
+    .reward-block:hover, .reward-piece:hover{
+        cursor: grab;
+    }
+
     
     .reward-piece {
         position: relative;
@@ -176,26 +162,19 @@
     }
     
     .delete-reward {
+        font-size: 14px;
         position: absolute;
         top: 0;
         right: 0;
         margin: 3px 5px 0px 0px;
+        opacity: 0.2;
     }
     
-/*   
-    .rewards > h3 {
-        height: 60px;
-        display: flex;
-        justify-content: center;
+    .delete-reward:hover {
+        cursor: default;
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
     }
-
-
-    .rewards-header > div {
-        display: flex;
-        justify-content: center;
-        width: 80px;
-        height: 100px;
-    } */
 
     
 
@@ -204,8 +183,8 @@
         /* flex-direction: column; */
         justify-content: space-around;
         /* border: 1px solid orange; */
-        /* padding: 50px 5px 50px 5px;
-        margin: 0px 10px 0px 10px; */
+        padding: 15px 5px 15px 5px;
+        margin: 0px 10px 0px 10px;
         width: 83%;
     }
 
@@ -218,40 +197,56 @@
         width: 90px;
     }
 
+    .action-panel  label {
+        color: rgb(46, 46, 46);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        width: 290px;
+    }
+    
+    .action-panel > input[type="text"] {
+        background-clip: padding-box;
+        border-radius: 3px;
+        box-shadow: none;
+    }
 
-/* 
-.row {
-    height: 20%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-}
-
-.row > h3 {
-    height: 30px;
-}
-
-
-.row > div {
-    height: 100px;
-    width: 100px;
-    border: 0.2px solid rgba(0, 0, 255, 0.2);
-} */
-
+    .action-panel input[type="text"]:focus {
+        outline: none;
+    }
 
 
 
 
+    #save-btn {
+        display: flex;
+        box-sizing: border-box;
+        /* width: 200px; */
+        height: 30px;
+        border-style: none;
+        background-color: #41aa44;
+        color: white;
+        /* padding: 10px; */
+        border-radius: 3px;
+        font-size: 12px;
+        margin-top: -5px;
+        /* margin-top: 5px;
+        margin-bottom: 5px; */
+    }
+
+    #save-btn:hover {
+        cursor: pointer;
+        background-color: #4ec251;
+    }
 
 
 
-
- .row-1, .row-2, .row-3, .row-4, .row-5 {
+ /* .row-1, .row-2, .row-3, .row-4, .row-5 {
      position: relative;
      display: flex;
      width: 500px;
      height: 100px;
-     /* border: 1px solid blue; */
-     /* width: auto; */
- }
+     
+ } */
 

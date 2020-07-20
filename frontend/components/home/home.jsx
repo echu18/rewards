@@ -10,6 +10,7 @@ class Home extends React.Component {
             arrangements: this.props.arrangements,
             fetched: false
         }
+        this.createNew = this.createNew.bind(this)
     }
     
     componentDidMount(){
@@ -20,6 +21,10 @@ class Home extends React.Component {
         if (this.props.arrangements !== prevProps.arrangements){
             this.setState({arrangements: this.props.arrangements})
         }
+    }
+
+    createNew(){
+        this.props.history.push('/create')
     }
 
 
@@ -46,7 +51,7 @@ class Home extends React.Component {
         return (
             <div className='home-container'>
                 <h3>Saved Arrangements</h3>
-                <p>Click to view/edit.</p>
+                <p>Click to view / edit.</p>
                 <div className='saved-arrangement-list'>
                     {/* {fetchedArrangements(this.state.arrangements)} */}
                     {Object.values(this.state.arrangements).map((arrangement, i) => {
@@ -57,7 +62,8 @@ class Home extends React.Component {
                 </div>
                 
 
-                <div className='create-arrangement-btn'><Link to={'/create'}>Create New Arrangement</Link></div>
+                {/* <div className='create-arrangement-btn'><Link to={'/create'}>Create New Arrangement</Link></div> */}
+                <div className='create-arrangement-btn' onClick={this.createNew}>Create New Arrangement</div>
             </div>
         )
     }

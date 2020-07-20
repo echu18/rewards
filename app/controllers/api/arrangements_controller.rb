@@ -28,7 +28,6 @@ class Api::ArrangementsController < ApplicationController
 
 
     def update
-        debugger
         @arrangement = Arrangement.find_by(id: params[:id])
 
         if @arrangement && @arrangement.update_attributes(arrangement_params)

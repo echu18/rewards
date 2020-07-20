@@ -8,7 +8,7 @@ import ArrangementContainer from './arrangement/arrangement_container';
 
 const App = () => (
   <div id="app">
-    <h3>Rewards Map</h3>
+    <Link className='rewards-map' to={'/'}>Rewards Map</Link>
     <div id="main">
       <Switch>
         <Route exact path="/" component={HomeContainer} />

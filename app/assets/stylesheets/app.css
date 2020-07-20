@@ -1,4 +1,5 @@
 #app {
+    color: rgb(65, 65, 65);
     position: relative;
     font-family: 'Mulish', sans-serif;
     min-height: 100vh;
@@ -6,21 +7,21 @@
     flex-direction: column;
     padding: 30px;
     align-items: center;
-    background-image: url("https://ec-storage.s3-us-west-1.amazonaws.com/reward-bg-2.png");
+    background-image: url("https://ec-storage.s3-us-west-1.amazonaws.com/reward-bg-6.png");
     background-repeat: no-repeat;
     /* background-position: bottom; */
     background-position-y: bottom;
     background-size: cover;
-/* background: -webkit-linear-gradient(top, rgba(131,199,131,1) 9%,rgba(82,177,82,1) 39%,rgba(0,138,0,1) 85%); Chrome10-25,Safari5.1-6 */
-
+    
 }
 
-#app > h3 {
+#app > .rewards-map {
     position: absolute;
+    text-decoration: none;
     top: 5px;
     left: 10px;
     margin: 20px;
-    font-size: 40px;
+    font-size: 44px;
     color: rgb(245, 245, 245);
     text-shadow: 1px 1px rgba(0, 0, 0, 0.55);
 }
@@ -30,5 +31,7 @@
     justify-content: center;
     width: 70%;
     height: 100%;
-
 }
+
+/* <a href="https://www.freepik.com/free-photos-vectors/infographic">Infographic vector created by freepik - www.freepik.com</a> */
+/* <a href="https://www.freepik.com/free-photos-vectors/business">Business vector created by vectorpouch - www.freepik.com</a> */

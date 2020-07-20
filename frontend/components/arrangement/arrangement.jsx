@@ -75,9 +75,21 @@ class Arrangement extends React.Component {
   }
 
 
+  componentDidUpdate(prevProps, prevState){
+    debugger
+    if (prevState.currentBoardData !== this.state.currentBoardData){
+      document.getElementById('save-btn').innerHTML = 'Save Arrangement'
+    }
+
+    if (prevState.name !== this.state.name){
+      document.getElementById('name-input').style.border = "1px solid gainsboro";
+    }
+  }
+
+
+
 
     mapSavedBoard(board) {
-      // let savedBoard = Array.from(board);
       this.mappedBoard(board)
       this.setState({ currentBoardData: board });
     }
@@ -86,11 +98,17 @@ class Arrangement extends React.Component {
       return (e) => {
         this.setState({ [type]: e.target.value });
       };
+    
     }
 
     save(e, board, name){
-      // e.preventDefault();
-      debugger
+      e.preventDefault();
+      
+      if (this.state.name === "") {
+          document.getElementById('name-input').style.border = "1px solid red"
+          return;
+      }
+
       let path = this.props.match.path;
 
       let r0 = JSON.stringify(board[0]);
@@ -100,14 +118,14 @@ class Arrangement extends React.Component {
       let r4 = JSON.stringify(board[4]);
       
       let arrangement = { r0: r0, r1: r1, r2: r2, r3: r3, r4: r4 , name: name}
-      debugger
+      
       
         if (path.includes('create')) {
           this.props.addArrangement(arrangement);
         } else if (path.includes('edit')) {
           this.props.modifyArrangement(parseInt(this.props.match.params.arrangementId), arrangement)
         }
-        debugger
+        document.getElementById('save-btn').innerHTML = 'Saved.'
     }
 
     
@@ -361,7 +379,6 @@ class Arrangement extends React.Component {
   drop_handler(ev) {
     console.log("Drop");
     ev.preventDefault();
-    
     // Get id of the drop target through dataTransfer
     let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
     let rewardRow = JSON.parse(ev.dataTransfer.getData("text")).row;
@@ -372,18 +389,18 @@ class Arrangement extends React.Component {
 
 
 
-    debugger
-    if (blockRow === "0") {
-      reward.style.backgroundColor = "lightgreen";
-    } else if (blockRow === "1"){
-      reward.style.backgroundColor = "red";
-    } else if (blockRow === "2"){
-        reward.style.backgroundColor = "blue";
-    } else if (blockRow === "3"){
-        reward.style.backgroundColor = "pink";
-    } else {
-        reward.style.backgroundColor = "orange";
-    }
+    // debugger
+    // if (blockRow === "0") {
+    //   reward.style.backgroundColor = "lightgreen";
+    // } else if (blockRow === "1"){
+    //   reward.style.backgroundColor = "red";
+    // } else if (blockRow === "2"){
+    //     reward.style.backgroundColor = "blue";
+    // } else if (blockRow === "3"){
+    //     reward.style.backgroundColor = "pink";
+    // } else {
+    //     reward.style.backgroundColor = "orange";
+    // }
     
 
 
@@ -402,7 +419,7 @@ class Arrangement extends React.Component {
       }
 
       let newCount = (this.state.pieceCounter += 1);
-      this.setState({ pieceCounter: newCount });
+      this.setState({ pieceCounter: newCount, futureBoardData: [] });
 
       this.updateBoardData();
     } else {
@@ -428,7 +445,6 @@ class Arrangement extends React.Component {
     }
 
     function checkFutureEqualsPast(state){
-      debugger
       let future = Object.values(state.futureBoardData);
       let past = Object.values(state.pastBoardData);
       
@@ -465,6 +481,8 @@ class Arrangement extends React.Component {
                 data-row="0"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
+                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
+                style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
               >
                 R1
               </div>
@@ -474,6 +492,10 @@ class Arrangement extends React.Component {
                 data-row="1"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
+                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
+                style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
+                // style={{ backgroundColor: '#ECECED', opacity: 0.9 }}
+
               >
                 R2
               </div>
@@ -483,7 +505,10 @@ class Arrangement extends React.Component {
                 data-row="2"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
-              >
+                // style={{ backgroundColor: '#F9DAE4', opacity: 0.9 }}
+                style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
+                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
+                >
                 R3
               </div>
               <div
@@ -492,7 +517,10 @@ class Arrangement extends React.Component {
                 data-row="3"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
-              >
+                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
+                style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
+                // style={{ backgroundColor: '#ECECED', opacity: 0.9 }}
+                >
                 R4
               </div>
               <div
@@ -501,6 +529,9 @@ class Arrangement extends React.Component {
                 data-row="4"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
+                style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
+                // style={{ backgroundColor: '#ECECED', opacity: 0.9 }}
+                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
               >
                 R5
               </div>
@@ -537,10 +568,10 @@ class Arrangement extends React.Component {
               </div>
         
         
-              <label>Name this arrangement
-                <input type="text" onChange={this.handleInput('name')} value={!!this.state.name ? this.state.name : null}/> 
+              <label>Name this arrangement:
+                <input id='name-input' type="text" onChange={this.handleInput('name')} value={!!this.state.name ? this.state.name : null}/> 
               </label>
-              <button onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save Arrangement</button>
+              <button id='save-btn' onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save Arrangement</button>
           
           </div>
       </div>
