@@ -89,8 +89,8 @@ class Arrangement extends React.Component {
     }
 
     save(e, board, name){
-      e.preventDefault();
-
+      // e.preventDefault();
+      debugger
       let path = this.props.match.path;
 
       let r0 = JSON.stringify(board[0]);
@@ -101,15 +101,16 @@ class Arrangement extends React.Component {
       
       let arrangement = { r0: r0, r1: r1, r2: r2, r3: r3, r4: r4 , name: name}
       debugger
-      switch (path){
-        case path.includes('create'):
+      
+        if (path.includes('create')) {
           this.props.addArrangement(arrangement);
-        case path.includes('edit'):
+        } else if (path.includes('edit')) {
           this.props.modifyArrangement(parseInt(this.props.match.params.arrangementId), arrangement)
-      }
-
-    debugger
+        }
+        debugger
     }
+
+    
 
 
 
@@ -259,7 +260,7 @@ class Arrangement extends React.Component {
         onDragOver={(event) => this.dragover_handler(event)}
       // onDoubleClick={(e) => this.addReward(e, row)}
       >
-        {row}-{col}
+        {/* {row}-{col} */}
       </div>
     );
   }
@@ -282,7 +283,7 @@ class Arrangement extends React.Component {
     nodeCopy.id = `reward-piece-${this.state.pieceCounter}`; // Give the reward piece a unique id once it's been dragged onto the board
     nodeCopy.className='reward-piece'
 
-    nodeCopy.innerHTML += "<div class='delete-reward'>X</div>";
+    nodeCopy.innerHTML += "<div class='delete-reward'>x</div>";
 
     return nodeCopy;
   }
@@ -330,10 +331,19 @@ class Arrangement extends React.Component {
   dragstart_handler(e) {
     console.log("dragStart");
     
-    
     // Change the source element's background color to signify drag has started
-
-    e.currentTarget.style.backgroundColor = "lightgreen";
+    // switch (e.currentTarget.id) {
+    //   case "0":
+    //     e.currentTarget.style.backgroundColor = "lightgreen";
+    //   case "1":
+    //     e.currentTarget.style.backgroundColor = "red";
+    //   case "2":
+    //     e.currentTarget.style.backgroundColor = "blue";
+    //   case "3":
+    //     e.currentTarget.style.backgroundColor = "pink";
+    //   case "4":
+    //     e.currentTarget.style.backgroundColor = "orange";
+    // }
 
     // Set the drag's format and data. Use the event target's id for the data
     // Since we're transferring an object, we'll convert it into JSON so it can be stored (will be parsed again on drop_handler)
@@ -359,6 +369,24 @@ class Arrangement extends React.Component {
 
     let rewardSideBar = document.getElementById("reward-sidebar");
     let blockRow = ev.currentTarget.getAttribute("data-row");
+
+
+
+    debugger
+    if (blockRow === "0") {
+      reward.style.backgroundColor = "lightgreen";
+    } else if (blockRow === "1"){
+      reward.style.backgroundColor = "red";
+    } else if (blockRow === "2"){
+        reward.style.backgroundColor = "blue";
+    } else if (blockRow === "3"){
+        reward.style.backgroundColor = "pink";
+    } else {
+        reward.style.backgroundColor = "orange";
+    }
+    
+
+
 
     if (rewardRow === blockRow && ev.target.childElementCount === 0) {
       // If dragging from reward sidebar, copy the node. If dragging from board, move the node
@@ -416,7 +444,7 @@ class Arrangement extends React.Component {
 
     return (
       <div className="arrangement-container">
-        <h3>Rewards Arrangement</h3>
+        {/* <h3>Rewards Arrangement</h3> */}
 
         <div className="board">
           <div className="rewards">
@@ -438,7 +466,7 @@ class Arrangement extends React.Component {
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
               >
-                R0
+                R1
               </div>
               <div
                 id="1"
@@ -447,7 +475,7 @@ class Arrangement extends React.Component {
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
               >
-                R1
+                R2
               </div>
               <div
                 id="2"
@@ -456,7 +484,7 @@ class Arrangement extends React.Component {
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
               >
-                R2
+                R3
               </div>
               <div
                 id="3"
@@ -465,7 +493,7 @@ class Arrangement extends React.Component {
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
               >
-                R3
+                R4
               </div>
               <div
                 id="4"
@@ -474,7 +502,7 @@ class Arrangement extends React.Component {
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
               >
-                R4
+                R5
               </div>
             </div>
 
@@ -487,20 +515,34 @@ class Arrangement extends React.Component {
 
           <div className="categories">
             <h3>Categories</h3>
+            <div className='cat-header'>
+              <p>C1</p>
+              <p>C2</p>
+              <p>C3</p>
+              <p>C4</p>
+              <p>C5</p>
+            </div>
             <div className="inner-grid">{this.state.currentBoardBlocks}</div>
           </div>
-        </div>
 
-        {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
-        {/* <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button> */}
-        <button onClick={this.undo} disabled={this.state.pastBoardData.length === 0 ? true : !!checkFutureEqualsPast(this.state) ? true : false} >Undo</button>
-        <button onClick={this.redo} disabled={this.state.futureBoardData.length === 0 ? true : !!checkCurrentEqualsFuture(this.state) ? true : false} >Redo</button>
-      
-      
-        <label>Name this arrangement
-          <input type="text" onChange={this.handleInput('name')} value={!!this.state.name ? this.state.name : null}/> 
-        </label>
-            <button onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save Arrangement</button>
+              {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
+              {/* <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button> */}
+              
+        </div>
+        
+          <div className='action-panel'>
+              <div className='action-btns'>
+                <button id='undo-btn' onClick={this.undo} disabled={this.state.pastBoardData.length === 0 ? true : !!checkFutureEqualsPast(this.state) ? true : false} >Undo</button>
+                <button id='redo-btn' onClick={this.redo} disabled={this.state.futureBoardData.length === 0 ? true : !!checkCurrentEqualsFuture(this.state) ? true : false} >Redo</button>
+              </div>
+        
+        
+              <label>Name this arrangement
+                <input type="text" onChange={this.handleInput('name')} value={!!this.state.name ? this.state.name : null}/> 
+              </label>
+              <button onClick={e=>this.save(e, this.state.currentBoardData, this.state.name)}>Save Arrangement</button>
+          
+          </div>
       </div>
     );
   }

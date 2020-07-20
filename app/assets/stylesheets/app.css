@@ -1,11 +1,11 @@
 #app {
+    position: relative;
     font-family: 'Mulish', sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 30px;
     align-items: center;
-    border: 1px solid fuchsia;
     background-image: url("https://ec-storage.s3-us-west-1.amazonaws.com/reward-bg-2.png");
     background-repeat: no-repeat;
     /* background-position: bottom; */
@@ -16,8 +16,13 @@
 }
 
 #app > h3 {
+    position: absolute;
+    top: 5px;
+    left: 10px;
     margin: 20px;
-    font-size: 32px;
+    font-size: 40px;
+    color: rgb(245, 245, 245);
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.55);
 }
 
 #main {

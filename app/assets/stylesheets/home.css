@@ -4,9 +4,8 @@
     flex-direction: column;
     align-items: center;
     width: 500px;
-    /* padding: 20px 0px 20px 0px; */
-        padding: 30px;
-
+    padding: 30px;
+    margin-top: 8%;
     border-radius: 5px;
     /* border: 1px solid gainsboro; */
     background-color: white;
@@ -49,7 +48,8 @@
 
 .saved-arrangement:hover {
     cursor: pointer;
-    background-color: #48BD4B;
+    /* background-color: #48BD4B; */
+    background-color: #88d38c;
     transition: background-color 0.3s ease-in-out;
 }
 
