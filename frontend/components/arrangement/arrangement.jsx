@@ -341,22 +341,6 @@ class Arrangement extends React.Component {
 
   // Drag handlers
   dragstart_handler(e) {
-    console.log("dragStart");
-    
-    // Change the source element's background color to signify drag has started
-    // switch (e.currentTarget.id) {
-    //   case "0":
-    //     e.currentTarget.style.backgroundColor = "lightgreen";
-    //   case "1":
-    //     e.currentTarget.style.backgroundColor = "red";
-    //   case "2":
-    //     e.currentTarget.style.backgroundColor = "blue";
-    //   case "3":
-    //     e.currentTarget.style.backgroundColor = "pink";
-    //   case "4":
-    //     e.currentTarget.style.backgroundColor = "orange";
-    // }
-
     // Set the drag's format and data. Use the event target's id for the data
     // Since we're transferring an object, we'll convert it into JSON so it can be stored (will be parsed again on drop_handler)
 
@@ -366,12 +350,10 @@ class Arrangement extends React.Component {
   }
 
   dragover_handler(ev) {
-    console.log("dragOver");
     ev.preventDefault();
   }
 
   drop_handler(ev) {
-    console.log("Drop");
     ev.preventDefault();
     // Get id of the drop target through dataTransfer
     let rewardId = JSON.parse(ev.dataTransfer.getData("text")).id;
