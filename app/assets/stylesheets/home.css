@@ -33,7 +33,7 @@
     min-width: 300px;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: hidden;
     margin: 30px;
 }
 
