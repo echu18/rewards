@@ -212,6 +212,7 @@
         background-clip: padding-box;
         border-radius: 3px;
         box-shadow: none;
+        margin: 0px 5px 0px 5px;
     }
 
     .action-panel input[type="text"]:focus {
