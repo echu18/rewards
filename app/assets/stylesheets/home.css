@@ -61,11 +61,12 @@
     /* background-color: #48BD4B; */
     background-color: #88d38c;
     transition: background-color 0.3s ease-in-out;
-}
-
-.saved-arrangement:hover > a {
     color: white;
 }
+
+/* .saved-arrangement:hover > a {
+    color: white;
+} */
 
 
 .create-arrangement-btn {
