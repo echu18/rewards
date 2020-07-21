@@ -223,7 +223,7 @@
     .save-delete-btns {
         display: flex;
         justify-content: space-around;
-        width: 150px;
+        width: 60px;
         margin-top: -5px;
         margin-left: -15px;
     }
