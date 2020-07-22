@@ -223,7 +223,7 @@
     .save-delete-btns {
         display: flex;
         justify-content: space-around;
-        width: 60px;
+        width: auto;
         margin-top: -5px;
         margin-left: -15px;
     }
@@ -240,6 +240,7 @@
         color: white;
         border-radius: 3px;
         font-size: 12px;
+        margin-right: 10px;
     }
 
     
