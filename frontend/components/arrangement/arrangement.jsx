@@ -9,7 +9,6 @@ import _ from "lodash";
 class Arrangement extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {};
     this.state = {
       name: "",
       pastBoardData: [],
@@ -41,7 +40,6 @@ class Arrangement extends React.Component {
 
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
-    // this.row = this.row.bind(this);
   }
 
   componentDidMount() {
@@ -143,7 +141,7 @@ class Arrangement extends React.Component {
   // Undo pt. 1)
   // Switch present/future boards
   undo() {
-    // if (this.state.pastBoardData.length === 0) return;
+
     let futureBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
     let newCurrentBoardData = JSON.parse(JSON.stringify(this.state.pastBoardData));
     
@@ -178,6 +176,10 @@ class Arrangement extends React.Component {
   // updateBoard() {}
 
   // After a drop or a delete, update the board
+  // This function takes actual dom elements with getElementByClassName - this just checks the actual board and sees if each space has a reward piece
+  // Then, it'll iterate through the board blocks, and update our state's currentBoardData according to whether or not it has a child element - aka, giving it a 1 or a 0
+  // This is just to make sure that what we're seeing on the screen corresponds to our saved data - because, although we can initially map from saved data,
+  //      if a user moves a piece or deletes a piece, this function is kind of the bridge between the saved data in our state and what is displayed on the screen through the dom
   updateBoardData() {
     let pastBoardData = JSON.parse(JSON.stringify(this.state.currentBoardData));
     let newBoard = JSON.parse(JSON.stringify(this.state.currentBoardData));
@@ -195,7 +197,6 @@ class Arrangement extends React.Component {
       newBoard[row][col] = block.childElementCount;
     }
 
-    // this.setState({ pastBoardData: pastBoardData, currentBoardData: newBoard });
     this.setState({ pastBoardData: pastBoardData, currentBoardData: newBoard });
   }
 
@@ -279,7 +280,7 @@ class Arrangement extends React.Component {
 
 
   createReward(rewardId, row) {
-    
+   
     let nodeCopy;
 
     rewardId = rewardId || row;
@@ -308,22 +309,12 @@ class Arrangement extends React.Component {
     let currentBoard = JSON.parse(JSON.stringify(this.state.currentBoardData));
     let reward = closeBtn.parentNode;
     
-    // this.setState({ futureBoardData: [] }, () => {this.updateBoardData()})
     
     if (!!reward.parentNode) {
       reward.parentNode.removeChild(reward);
       this.setState({pastBoardData: currentBoard, futureBoardData: []})
       this.updateBoardData(), ()=> this.setState({newCurrentBoardData: this.state.currentBoardData});
     }
-
-    let rewardCount = document.getElementsByClassName("reward-piece").length
-    // this.updateBoardData()
-      
-    // if (rewardCount === 0){
-    //   this.setState({ futureBoardData: currentBoard}, () => {this.updateBoardData(); this.mappedBoard(currentBoard)})
-    // } else {
-    //   this.setState({ futureBoardData: [] }, () => this.updateBoardData())
-    // }
   }
 
   attachDeleteRewardListener() {
@@ -363,12 +354,14 @@ class Arrangement extends React.Component {
     let rewardSideBar = document.getElementById("reward-sidebar");
     let blockRow = ev.currentTarget.getAttribute("data-row");
 
-
+    // Checks to make sure it's the same row (aka swimlane)
     if (rewardRow === blockRow && ev.target.childElementCount === 0) {
       // If dragging from reward sidebar, copy the node. If dragging from board, move the node
       // If reward still has its id from the original reward-block, then we'll need to make a copy of the piece
       // If reward has a unique id, it means it's been placed already, and subsequent drags will MOVE the piece, not copy
 
+
+      // Checks id to see if it was originally dragged from left sidebar or not
       if (Object.values(rewardSideBar.children).includes(reward)) {
         let nodeCopy = this.createReward(rewardId, null);
 
@@ -427,11 +420,7 @@ class Arrangement extends React.Component {
               <h3>Rewards</h3>
             </div>
 
-            {/* <div id="reward-box-0" className='reward-placemark' onMouseDown={e => this.addReward(e, 0)}>R1</div>
-            <div id="reward-box-1" className='reward-placemark'>R2</div>
-            <div id="reward-box-2" className='reward-placemark'>R3</div>
-            <div id="reward-box-3" className='reward-placemark'>R4</div>
-            <div id="reward-box-4" className='reward-placemark'>R5</div> */}
+        
 
             <div id="reward-sidebar">
               <div
@@ -440,7 +429,6 @@ class Arrangement extends React.Component {
                 data-row="0"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
-                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
                 style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
               >
                 R1
@@ -451,10 +439,7 @@ class Arrangement extends React.Component {
                 data-row="1"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
-                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
                 style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
-                // style={{ backgroundColor: '#ECECED', opacity: 0.9 }}
-
               >
                 R2
               </div>
@@ -464,9 +449,7 @@ class Arrangement extends React.Component {
                 data-row="2"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
-                // style={{ backgroundColor: '#F9DAE4', opacity: 0.9 }}
                 style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
-                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
                 >
                 R3
               </div>
@@ -476,9 +459,7 @@ class Arrangement extends React.Component {
                 data-row="3"
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
-                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
                 style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
-                // style={{ backgroundColor: '#ECECED', opacity: 0.9 }}
                 >
                 R4
               </div>
@@ -489,18 +470,12 @@ class Arrangement extends React.Component {
                 onDragStart={(event) => this.dragstart_handler(event)}
                 draggable="true"
                 style={{ backgroundColor: '#F3BF3E', opacity: 0.9 }}
-                // style={{ backgroundColor: '#ECECED', opacity: 0.9 }}
-                // style={{ backgroundColor: 'lightgreen', opacity: 0.9 }}
               >
                 R5
               </div>
             </div>
 
-            {/* <div id="r-1" className="reward-block" data-row='0' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R1</div>
-            <div id="r-2" className="reward-block" data-row='1' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R2</div>
-            <div id="r-3" className="reward-block" data-row='2' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R3</div>
-            <div id="r-4" className="reward-block" data-row='3' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R4</div>
-            <div id="r-5" className="reward-block" data-row='4' onDragStart={(event) => this.dragstart_handler(event)} draggable="true">R5</div> */}
+
           </div>
 
           <div className="categories">
@@ -515,8 +490,7 @@ class Arrangement extends React.Component {
             <div className="inner-grid">{this.state.currentBoardBlocks}</div>
           </div>
 
-              {/* <button onClick={this.undo} disabled={true} >Undo</button> */}
-              {/* <button onClick={this.undo} disabled={this.state.pastBoardData.length > 0 ? false : true} >Undo</button> */}
+
               
         </div>
         
@@ -545,14 +519,3 @@ class Arrangement extends React.Component {
 export default Arrangement;
 
 
-
-// Save just in case I mess up
-  // mappedBoard() {
-  //   let newBoard = [];
-
-  //   for (let i = 0; i < this.state.currentBoardData.length; i++) {
-  //     let row = this.state.currentBoard[i].map((block, j) => this.block(i, j));
-  //     newBoard.push(row);
-  //   }
-  //   return newBoard;
-  // }
